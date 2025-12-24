@@ -1,4 +1,5 @@
-package com.savt.backend.domain.entity;
+package com.savt.backend.domain.enums;
 
 public enum Role {
+    ADMIN, COACH
 }

@@ -2321,12 +2321,67 @@
       "aiTool": "AI Assistant",
       "detectionMethod": "REALTIME_SPEED_ANALYSIS",
       "lineCount": 2
+    },
+    {
+      "filePath": "C:/Users/safiy/Downloads/savt-backend/backend/src/main/java/com/savt/backend/domain/entity/User.java",
+      "timestamp": 1766599870630,
+      "startOffset": 441,
+      "endOffset": 550,
+      "codeContent": "@CreatedDate\n    private LocalDateTime creationAt;\n\n    @LastModifiedDate\n    private LocalDateTime updateAt;",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 5
+    },
+    {
+      "filePath": "/User.java",
+      "timestamp": 1766599872033,
+      "startOffset": 453,
+      "endOffset": 473,
+      "codeContent": "IntellijIdeaRulezzz ",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 1
+    },
+    {
+      "filePath": "C:/Users/safiy/Downloads/savt-backend/backend/src/main/java/com/savt/backend/domain/entity/User.java",
+      "timestamp": 1766599872995,
+      "startOffset": 127,
+      "endOffset": 182,
+      "codeContent": "import org.springframework.data.annotation.CreatedDate;",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 1
+    },
+    {
+      "filePath": "C:/Users/safiy/Downloads/savt-backend/backend/src/main/java/com/savt/backend/domain/entity/User.java",
+      "timestamp": 1766599874655,
+      "startOffset": 292,
+      "endOffset": 323,
+      "codeContent": "import java.time.LocalDateTime;",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 1
+    },
+    {
+      "filePath": "C:/Users/safiy/Downloads/savt-backend/backend/src/main/java/com/savt/backend/domain/entity/User.java",
+      "timestamp": 1766599878006,
+      "startOffset": 230,
+      "endOffset": 290,
+      "codeContent": "import org.springframework.data.annotation.LastModifiedDate;",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 1
     }
   ],
   "toolStats": {
     "AI Assistant": {
-      "usageCount": 211,
-      "totalLines": 577
+      "usageCount": 216,
+      "totalLines": 586
     }
   }
 }

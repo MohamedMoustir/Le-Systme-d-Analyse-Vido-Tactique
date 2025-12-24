@@ -1,4 +1,4 @@
-package com.smartshop.domain.Exception;
+package com.savt.backend.domain.exception;
 
 public class InvalidOrderStateException extends RuntimeException {
     public InvalidOrderStateException(String message) {

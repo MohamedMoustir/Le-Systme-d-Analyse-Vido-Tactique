@@ -1,4 +1,4 @@
-package com.smartshop.domain.Exception;
+package com.savt.backend.domain.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

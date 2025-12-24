@@ -1,4 +1,4 @@
-package com.smartshop.domain.Exception;
+package com.savt.backend.domain.exception;
 
 public class BusinessLogicException extends RuntimeException {
     public BusinessLogicException(String message) {

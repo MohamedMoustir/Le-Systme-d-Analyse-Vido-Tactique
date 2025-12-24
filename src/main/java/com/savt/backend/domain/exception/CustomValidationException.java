@@ -1,4 +1,4 @@
-package com.smartshop.domain.Exception;
+package com.savt.backend.domain.exception;
 
 public class CustomValidationException extends RuntimeException {
     public CustomValidationException(String message) {

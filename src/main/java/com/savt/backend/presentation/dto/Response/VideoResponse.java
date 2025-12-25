@@ -19,7 +19,7 @@ public class VideoResponse {
     private String dateUpload;
     private String statut;
 
-    private UserResponse uploader;
+    private UserResponseDTO uploader;
 
     private List<EventResponse> events;
     private List<CommentResponse> commentaires;

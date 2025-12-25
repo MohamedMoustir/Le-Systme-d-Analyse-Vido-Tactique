@@ -7,6 +7,7 @@ import com.savt.backend.domain.repository.UserRepository;
 import com.savt.backend.infrastructure.service.AutheticatedUser;
 import com.savt.backend.infrastructure.service.JwtService;
 import com.savt.backend.infrastructure.service.RefreshTokenService;
+import com.savt.backend.presentation.dto.Request.RegisterRequest;
 import com.savt.backend.presentation.dto.Response.LoginResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,21 +30,22 @@ public class AuthService {
     private final RedisTemplate<String ,Object> redisTemplate ;
 
 
-    public LoginResponse register(String email , String password,String role){
-        if(userRepository.findByEmail(email).isPresent()){
-            throw new DuplicateResourceException("User already exist with Email :" + email);
+    public LoginResponse register(RegisterRequest registerRequest){
+        if(userRepository.findByEmail(registerRequest.getEmail()).isPresent()){
+            throw new DuplicateResourceException("User already exist with Email :" + registerRequest.getEmail());
         }
         User user = User.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .nom(registerRequest.getNom())
                 .isActivated(true)
-                .role(Role.valueOf(role))
+                .role(Role.valueOf(registerRequest.getRole()))
                 .build();
         userRepository.save(user);
 
         String roles = user.getRole().toString();
-        String accessToken = this.jwtService.generateToken(email, roles);
-        String refreshToken = this.jwtService.generateRefreshToken(email);
+        String accessToken = this.jwtService.generateToken(registerRequest.getEmail(), roles);
+        String refreshToken = this.jwtService.generateRefreshToken(registerRequest.getEmail());
 
         refreshTokenService.storeRefreshtoken(refreshToken);
 

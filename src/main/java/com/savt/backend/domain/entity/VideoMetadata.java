@@ -1,6 +1,7 @@
 package com.savt.backend.domain.entity;
 
 import com.savt.backend.domain.enums.StatutAnalyse;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Data
 @Document(collection="analyses")
+@Builder
 public class VideoMetadata {
 
     @Id

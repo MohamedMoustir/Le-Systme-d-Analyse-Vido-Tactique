@@ -31,6 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
-.ai-code-tracking.json/
+.ai-code-tracking.json
 .env
 uploads/

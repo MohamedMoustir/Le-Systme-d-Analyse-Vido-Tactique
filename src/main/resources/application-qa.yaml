@@ -13,11 +13,35 @@ spring:
       uri: mongodb://localhost:27017/savt_db
       auto-index-creation: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: {CLIENT_ID}
+            client-secret: {CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+            redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
+            client-name: Google
+#          facebook:
+#            client-id: "TON_FACEBOOK_APP_ID"
+#            client-secret: "TON_FACEBOOK_APP_SECRET"
+#            scope:
+#              - public_profile
+#              - email
+#            redirect-uri: "{BASEURL}/login/oauth2/code/{registrationId}"
+#            client-name: Facebook
+        provider:
+          facebook:
+            authorization-uri: https://www.facebook.com/v13.0/dialog/oauth
+            token-uri: https://graph.facebook.com/v13.0/oauth/access_token
+            user-info-uri: https://graph.facebook.com/me?fields=id,name,email
+
 jwt:
   secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-
   access-token:
-    expiration: 900000
-
+    expiration: 900000 # 15 minutes
   refresh-token:
-    expiration: 604800000
+    expiration: 604800000 # 7 jours

@@ -2,6 +2,7 @@ package com.savt.backend.presentation.dto.Request;
 
 
 import com.savt.backend.domain.enums.Role;
+import com.savt.backend.domain.enums.Social;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,9 @@ public class UserRequestDTO {
 
     @NotBlank
     private String password;
+
+    @NotBlank
+    private Social provider;
 
     private Role role;
 }

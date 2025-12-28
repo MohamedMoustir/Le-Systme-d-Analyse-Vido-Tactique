@@ -4,6 +4,7 @@ import com.savt.backend.domain.entity.User;
 import com.savt.backend.domain.enums.Role;
 import com.savt.backend.domain.repository.UserRepository;
 
+import com.savt.backend.infrastructure.persistence.SpringDataUserRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class DataSeeder implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(DataSeeder.class);
 
-    private final UserRepository userRepository ;
+    private final SpringDataUserRepository userRepository ;
 
     @Override
     public void run(String... args) throws Exception {

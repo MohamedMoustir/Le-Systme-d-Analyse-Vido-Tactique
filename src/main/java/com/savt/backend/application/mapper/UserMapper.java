@@ -17,6 +17,7 @@ public interface UserMapper {
     @Mapping(target = "isActivated", constant = "true")
     @Mapping(target = "creationAt", ignore = true)
     @Mapping(target = "updateAt", ignore = true)
+    @Mapping(target = "provider", ignore = true)
     User toEntity(UserRequestDTO request);
 
 
@@ -26,6 +27,7 @@ public interface UserMapper {
     @Mapping(target = "creationAt", ignore = true)
     @Mapping(target = "updateAt", ignore = true)
     @Mapping(target = "activated", ignore = true)
+    @Mapping(target = "provider", ignore = true)
     void updateUserFromDto(UserUpdateDTO dto, @MappingTarget User entity);
 
 }

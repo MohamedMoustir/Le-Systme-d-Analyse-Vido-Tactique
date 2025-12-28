@@ -43,19 +43,7 @@ public class AuthService {
                 .build();
         userRepository.save(user);
 
-        String roles = user.getRole().toString();
-        String accessToken = this.jwtService.generateToken(registerRequest.getEmail(), roles);
-        String refreshToken = this.jwtService.generateRefreshToken(registerRequest.getEmail());
-
-        refreshTokenService.storeRefreshtoken(refreshToken);
-
-        return LoginResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .tokenType(BEARER_TOKEN_TYPE)
-                .email(user.getEmail())
-                .role(roles)
-                .build();
+       return generateLoginResponse(user);
     }
 
     public LoginResponse login(String email, String password) {
@@ -66,8 +54,43 @@ public class AuthService {
         AutheticatedUser autheticatedUser = (AutheticatedUser) authentication.getPrincipal();
         User user = autheticatedUser.getUser();
 
+        return generateLoginResponse(user);
+
+    }
+
+    public LoginResponse loginFromSocial(User user) {
+        return generateLoginResponse(user);
+    }
+
+    public LoginResponse refreshToken(String incomingRefreshToken) {
+
+        boolean isValid = refreshTokenService.validateRefreshToken(incomingRefreshToken);
+        if (!isValid) {
+            throw new RuntimeException("Refresh Token Invalide ou Expiré (Veuillez vous reconnecter)");
+        }
+
+        String email = refreshTokenService.getUsernameFromRefreshToken(incomingRefreshToken);
+
+        if (email == null) {
+            throw new RuntimeException("Session introuvable");
+        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+
+        String newAccessToken = jwtService.generateToken(user.getEmail(), user.getRole().toString());
+
+        return LoginResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(incomingRefreshToken)
+                .tokenType(BEARER_TOKEN_TYPE)
+                .email(user.getEmail())
+                .role(user.getRole().toString())
+                .build();
+    }
+
+    private LoginResponse generateLoginResponse(User user) {
         String role = user.getRole().toString();
-        String accessToken = this.jwtService.generateToken(email, role);
+        String accessToken = this.jwtService.generateToken(user.getEmail(), role);
         String refreshToken = this.jwtService.generateRefreshToken(user.getEmail());
 
         refreshTokenService.storeRefreshtoken(refreshToken);
@@ -77,7 +100,7 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .tokenType(BEARER_TOKEN_TYPE)
                 .email(user.getEmail())
-                .role(user.getRole().toString())
+                .role(role)
                 .build();
     }
 }

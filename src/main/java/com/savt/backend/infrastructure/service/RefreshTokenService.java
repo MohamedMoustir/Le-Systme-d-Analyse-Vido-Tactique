@@ -84,4 +84,8 @@ public class RefreshTokenService {
             redisTemplate.delete(USER_REFRESH_TOKENS_PREFIX + username);
         }
     }
+    public String getRefreshToken(String email) {
+        Object token = redisTemplate.opsForValue().get("refresh_token:" + email);
+        return token != null ? token.toString() : null;
+    }
 }

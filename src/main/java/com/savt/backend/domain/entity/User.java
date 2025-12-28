@@ -1,6 +1,7 @@
 package com.savt.backend.domain.entity;
 
 import com.savt.backend.domain.enums.Role;
+import com.savt.backend.domain.enums.Social;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,6 +27,9 @@ public class User {
 
     @LastModifiedDate
     private LocalDateTime updateAt;
+
+    private Social provider;
+
     private boolean isActivated;
 
 }

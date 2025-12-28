@@ -1,16 +1,18 @@
 package com.savt.backend.presentation.controller;
 
 import com.savt.backend.application.service.AuthService;
+import com.savt.backend.application.service.UserServise;
+import com.savt.backend.domain.entity.User;
 import com.savt.backend.presentation.dto.Request.LoginRequest;
+import com.savt.backend.presentation.dto.Request.RefreshTokenRequest;
 import com.savt.backend.presentation.dto.Request.RegisterRequest;
 import com.savt.backend.presentation.dto.Response.LoginResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthController {
 
     private final AuthService authService ;
+    private final UserServise userService;
 
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest registerRequest){
@@ -31,5 +34,12 @@ public class AuthController {
         return ResponseEntity.ok(response);
 
     }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<LoginResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        LoginResponse response = authService.refreshToken(request.getToken());
+        return ResponseEntity.ok(response);
+    }
+
 
 }

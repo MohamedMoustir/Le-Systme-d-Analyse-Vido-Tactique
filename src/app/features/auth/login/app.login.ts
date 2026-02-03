@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Auth } from '../../../core/services/auth';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthStore } from '../../../core/store/auth.store';
 
 @Component({
   selector: 'app-login',
@@ -13,16 +14,12 @@ import { CommonModule } from '@angular/common';
 export class Login {
 
   private fb = inject(FormBuilder);
-  private authService = inject(Auth);
-  private router = inject(Router);
+  readonly store = inject(AuthStore);
 
-  loginForm :FormGroup = this.fb.group({
+  loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]]
   });
-
-  isLoading = false;
-  errorMessage = '';
 
   get f() { return this.loginForm.controls; }
 
@@ -36,34 +33,8 @@ export class Login {
       return;
     }
 
-    this.isLoading = true;
-    this.errorMessage = '';
-
     const credentials = this.loginForm.value;
-    this.authService.login(credentials).subscribe({
-      next: (res :any) => {
-        if(res.accessToken){
-          localStorage.setItem('token', res.accessToken);
-        }
-        if (res.refreshToken) {
-          localStorage.setItem('refreshToken', res.refreshToken);
-        }
-        if (res.role) {
-          localStorage.setItem('role', res.role);
-        }
-        this.isLoading = false;
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error("Login Error:", err);
-        this.isLoading = false;
-        if (err.status === 403 || err.status === 401) {
-          this.errorMessage = "Email ou mot de passe incorrect.";
-        } else {
-          this.errorMessage = "Erreur serveur (Vérifiez la connexion Redis).";
-        }
-      }
-    });
+    this.store.login(credentials);
   }
 
 }

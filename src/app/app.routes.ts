@@ -3,4 +3,12 @@ import { VideoDashboardComponent } from './features/video-analysis/video-dashboa
 
 export const routes: Routes = [
   { path: '', component: VideoDashboardComponent }, 
+  {
+    path:'register',
+    loadComponent: () => import('./features/auth/register/app.register').then(m => m.Register)
+  },
+  {
+    path : 'login',
+    loadComponent: () => import('./features/auth/login/app.login').then(m => m.Login)
+  }
 ];

@@ -20,7 +20,7 @@ export class WebsocketService {
     this.client = new Client({
       webSocketFactory: () => new SockJS(`${environment.wsUrl}`),
       onConnect: () => {
-        console.log('✅ WebSocket Connected');
+        console.log(' WebSocket Connected');
         this.connectionStatusSubject.next(true);
         this.client.subscribe('/topic/analysis', (message) => {
           if (message.body) {
@@ -30,7 +30,7 @@ export class WebsocketService {
         });
       },
       onDisconnect: () => {
-        console.log('❌ WebSocket Disconnected');
+        console.log('WebSocket Disconnected');
         this.connectionStatusSubject.next(false);
       },
       onStompError: (frame) => {

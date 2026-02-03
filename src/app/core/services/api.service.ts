@@ -23,7 +23,7 @@ export class ApiService {
   }
 
   startAnalysis(videoId: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/${videoId}/analyze`, {});
+    return this.http.post(`${this.baseUrl}/${videoId}/analyze`, {},{responseType: 'text'} );
   }
 
   stopAnalysis(): Observable<any> {

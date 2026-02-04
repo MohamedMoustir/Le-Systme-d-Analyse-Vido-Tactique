@@ -1,0 +1,47 @@
+services:
+  savt_db:
+    image: mongo:6.0
+    container_name: savt_mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: savt_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - db_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  savt_redis:
+    image: redis:alpine
+    container_name: savt_redis
+    ports:
+      - "6379:6379"
+    volumes:
+        - redis_data:/data
+
+#  app:
+#    build: .
+#    container_name: savt_app
+#    restart: always
+#    depends_on:
+#      savt_db:
+#        condition: service_healthy
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./src:/app/src
+#      - ./pom.xml:/app/pom.xml
+#    environment:
+#      SPRING_PROFILES_ACTIVE: qa
+#      SPRING_DATA_MONGODB_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@savt_db:27017/savt_db?authSource=admin
+
+volumes:
+  db_data:
+  redis_data:

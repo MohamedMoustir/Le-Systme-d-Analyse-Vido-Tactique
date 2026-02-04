@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { VideoStore } from '../../../../core/store/video.store';
 
 @Component({
   selector: 'app-upload-zone',
@@ -9,36 +10,41 @@ import { CommonModule } from '@angular/common';
   styleUrls: []
 })
 export class UploadZoneComponent {
-  @Output() fileSelected = new EventEmitter<File>();
-  
-  isDragover = false;
+
+  readonly store = inject(VideoStore);
+  isDragover = signal(false);
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.fileSelected.emit(input.files[0]);
+      this.handleFile(input.files[0]);
     }
   }
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
-    this.isDragover = true;
+    this.isDragover.set(true);
   }
 
   onDragLeave(): void {
-    this.isDragover = false;
+    this.isDragover.set(false);
   }
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
-    this.isDragover = false;
-    
+    this.isDragover.set(false);
+
     if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
-      this.fileSelected.emit(event.dataTransfer.files[0]);
+      this.handleFile(event.dataTransfer.files[0]);
     }
   }
 
   openFileDialog(fileInput: HTMLInputElement): void {
-    fileInput.click();
+    if (!this.store.isUploading()) {
+      fileInput.click();
+    }
+  }
+  private handleFile(file: File): void {
+    this.store.uploadVideo(file);
   }
 }

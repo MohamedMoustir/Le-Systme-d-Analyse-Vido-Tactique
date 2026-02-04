@@ -1,32 +1,33 @@
-<div 
-  class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ease-in-out"
-  [ngClass]="isDragover ? 'border-blue-500 bg-blue-50 scale-[1.01]' : 'border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-gray-400'"
-  (click)="fileInput.click()"
-  (dragover)="onDragOver($event)"
-  (dragleave)="onDragLeave()"
-  (drop)="onDrop($event)">
-  
-  <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
-    <svg 
-      class="w-12 h-12 mb-4 transition-colors duration-300" 
-      [class.text-blue-500]="isDragover"
-      [class.text-gray-500]="!isDragover"
-      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-      <polyline points="17 8 12 3 7 8"/>
-      <line x1="12" y1="3" x2="12" y2="15"/>
-    </svg>
+<div (click)="openFileDialog(fileInput)"
+     (drop)="onDrop($event)"
+     (dragover)="onDragOver($event)"
+     (dragleave)="onDragLeave()"
+     [ngClass]="isDragover() 
+        ? 'border-blue-500 bg-blue-500/5 shadow-[0_0_30px_rgba(59,130,246,0.2)] scale-[1.01]' 
+        : 'border-white/10 hover:border-blue-500/30 hover:bg-white/5'"
+     class="group relative w-full h-72 rounded-2xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center cursor-pointer overflow-hidden">
 
-    <p class="mb-2 text-sm font-semibold text-gray-700">
-      <span class="text-blue-600 underline">Glissez une vidéo ici</span> ou cliquez pour sélectionner
-    </p>
-    <p class="text-xs text-gray-500">Formats acceptés: MP4, AVI, MOV (Max. 500MB)</p>
+  <input #fileInput type="file" accept="video/*" class="hidden" (change)="onFileSelected($event)">
+
+  <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.02)_50%,transparent_75%,transparent_100%)] bg-[length:20px_20px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+  <div class="relative w-20 h-20 mb-6 rounded-full bg-slate-800/50 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-300">
+    <div class="absolute inset-0 rounded-full border border-blue-500/0 group-hover:border-blue-500/50 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all"></div>
+    
+    <svg class="w-10 h-10 text-slate-500 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+    </svg>
   </div>
 
-  <input 
-    type="file" 
-    #fileInput
-    accept="video/*" 
-    class="hidden" 
-    (change)="onFileSelected($event)">
+  <div class="text-center relative z-10">
+    <p class="text-lg font-bold text-slate-300 group-hover:text-white transition-colors">
+      Glissez votre vidéo ici
+    </p>
+    <p class="text-sm text-slate-500 mt-2 font-mono group-hover:text-blue-400 transition-colors">
+      <span class="text-blue-500">Explorer</span> les fichiers
+    </p>
+    <p class="text-xs text-slate-600 mt-4 px-3 py-1 rounded-full bg-slate-900/50 inline-block border border-white/5">
+      MP4, MOV • Max 2GB
+    </p>
+  </div>
 </div>

@@ -1,6 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../../environments/environment';
+import { VideoStore } from '../../../../core/store/video.store';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-video-player',
@@ -9,93 +11,58 @@ import { environment } from '../../../../../environments/environment';
   templateUrl: './video-player.component.html',
   styleUrls: []
 })
-export class VideoPlayerComponent implements OnChanges {
-  @Input() videoUrl: string | null = null;
-  @Input() currentVideoPath: string | null = null;
-  @Input() currentVideoId: number | null = null;
-  @Input() device = 'cpu';
-  @Input() isAnalyzing = false;
+export class VideoPlayerComponent {
+  readonly store = inject(VideoStore);
+  private sanitizer = inject(DomSanitizer);
 
-  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
-  @ViewChild('liveStreamImg') liveStreamImg!: ElementRef<HTMLImageElement>;
 
-  activeTab: 'original' | 'live' = 'original';
-  isLiveStreamEnabled = false;
-  isLiveStreaming = false;
-  showStreamLoading = true;
+  activeTab = signal<'original' | 'live'>('original');
+  isStreamImageLoading = signal(true);
+  safeStreamUrl = computed(() => {
+    const rawUrl = this.store.streamRawUrl();
+    return rawUrl ? this.sanitizer.bypassSecurityTrustUrl(rawUrl) : null;
+  });
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isAnalyzing'] && this.isAnalyzing) {
-      this.isLiveStreamEnabled = true;
-    }
-    
-    if (changes['videoUrl'] && this.videoUrl) {
-      this.resetTabs();
-    }
+  constructor() {
+    effect(() => {
+      if (this.store.isLiveStreaming()) {
+        this.activeTab.set('live');
+        this.isStreamImageLoading.set(true);
+      }
+      else if (!this.store.currentVideoId()) {
+        this.activeTab.set('original');
+      }
+    });
   }
 
   showOriginalVideo(): void {
-    if (this.isAnalyzing && this.isLiveStreaming) {
+    if (this.store.isAnalyzing() && this.store.isLiveStreaming()) {
       if (!confirm("Arreter l'analyse en cours et revenir a la video originale ?")) {
         return;
       }
-      this.stopLiveStream();
+      this.store.stopAnalysis();
     }
-    
-    this.activeTab = 'original';
+
+    this.activeTab.set('original');
   }
 
   showLiveStream(): void {
-    if (!this.currentVideoPath) return;
-    
-    if (!this.isLiveStreaming) {
-      this.startLiveStream();
+    if (!this.store.currentVideoPath()) return;
+
+    if (!this.store.isAnalyzing()) {
+      this.activeTab.set('live');
     }
-    
-    this.activeTab = 'live';
+
+  }
+  onStreamLoaded() {
+    this.isStreamImageLoading.set(false);
+  }
+  onStreamError() {
+    console.warn("En attente de diffusion ou connexion interrompue...");
   }
 
-  private startLiveStream(): void {
-    if (!this.currentVideoPath || !this.currentVideoId) return;
-    if (this.isLiveStreaming) return;
 
-    this.isLiveStreaming = true;
-    this.showStreamLoading = true;
 
-    const streamUrl = `${environment.streamUrl}/mjpeg?videoPath=${encodeURIComponent(this.currentVideoPath)}&videoId=${this.currentVideoId}&device=${this.device}&t=${Date.now()}`;
-    
-    if (this.liveStreamImg) {
-      this.liveStreamImg.nativeElement.onload = () => {
-        this.showStreamLoading = false;
-        this.liveStreamImg.nativeElement.onload = null;
-      };
-      
-      this.liveStreamImg.nativeElement.onerror = () => {
-        console.warn('Erreur de stream - le modele se charge peut-etre encore...');
-      };
-      
-      this.liveStreamImg.nativeElement.src = streamUrl;
-    }
-  }
 
-  private stopLiveStream(): void {
-    this.isLiveStreaming = false;
-    this.showStreamLoading = true;
-    
-    if (this.liveStreamImg) {
-      this.liveStreamImg.nativeElement.onload = null;
-      this.liveStreamImg.nativeElement.onerror = null;
-      this.liveStreamImg.nativeElement.src = '';
-    }
-    
-    this.activeTab = 'original';
-    
-    fetch('/stream/stop', { method: 'POST' }).catch(() => {});
-  }
 
-  private resetTabs(): void {
-    this.activeTab = 'original';
-    this.isLiveStreamEnabled = false;
-    this.stopLiveStream();
-  }
 }

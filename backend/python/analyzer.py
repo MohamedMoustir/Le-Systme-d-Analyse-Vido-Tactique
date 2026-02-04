@@ -422,10 +422,7 @@ class FootballAnalyzer:
         return [pred_cx - w/2, pred_cy - h/2, pred_cx + w/2, pred_cy + h/2]
 
     def analyze_frame(self, frame, frame_num, fast_mode=False, ultra_fast_mode=False):
-        output_json({
-        "type": "analysis_start",
-        "message": "AI Engine is initializing..."
-    })
+
         h, w = frame.shape[:2]
            
         pitch_polygon = np.array([
@@ -625,11 +622,9 @@ class FootballAnalyzer:
             jersey_number = None
             player_name = None
             if self.jersey_recognizer:
-                
                 cached_number = self.jersey_recognizer.player_jersey_cache.get(player_id)
                 high_conf = self.jersey_recognizer.jersey_confidence.get(player_id, 0) >= 2
-                old_number = self.jersey_recognizer.player_jersey_cache.get(player_id)
-                jersey_number = self.jersey_recognizer.recognize_number(frame, bbox, player_id)
+
                 if high_conf:
                     jersey_number = cached_number
                 elif ultra_fast_mode:
@@ -666,10 +661,6 @@ class FootballAnalyzer:
                 "speed_kmh": round(speed, 2) if speed else 0,
                 "distance_m": round(distance, 2) if distance else 0
             }
-            output_json({
-            "jersey_number": jersey_number,
-            "player_name": player_name
-            })
             players_data.append(player_data)
         # Ball possession
         ball_holder_id = self.ball_assigner.assign_ball_to_player(

@@ -98,10 +98,6 @@ class JerseyNumberRecognizer:
         if jersey_region3.size > 0 and jersey_region3.shape[0] >= 10 and jersey_region3.shape[1] >= 8:
             regions.append(jersey_region3)
 
-        shorts_region = player_img[int(h*0.6):int(h*0.85), int(w*0.1):int(w*0.9)]
-        if shorts_region.size > 0 and shorts_region.shape[0] >= 12:
-            regions.append(shorts_region)
-            
         return regions
 
     def extract_jersey_region(self, frame, bbox):
@@ -110,28 +106,22 @@ class JerseyNumberRecognizer:
         return regions[0] if regions else None
 
     def preprocess_for_ocr(self, image):
-       
-        if image is None or image.size == 0:
-            return image
-
+        """Preprocess image for better OCR results"""
+        # Resize for better OCR
         h, w = image.shape[:2]
-        image = cv2.resize(image, (w*3, h*3), interpolation=cv2.INTER_CUBIC)
+        scale = max(1, 50 / min(h, w))
+        if scale > 1:
+            image = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
 
-    
+        # Convert to grayscale
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-        # 3. CLAHE (Contrast Enhancement)
-        clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
+        # Apply contrast enhancement
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         enhanced = clahe.apply(gray)
 
-        # 4. Denoising (Bach n-7iydo l-mouchwichat sghar)
-        denoised = cv2.fastNlMeansDenoising(enhanced, None, 10, 7, 21)
-
-        # 5. Adaptive Thresholding (K-y-rdd l-image B&W 3la hsab l-lighting)
-        binary = cv2.adaptiveThreshold(
-            denoised, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-            cv2.THRESH_BINARY, 11, 2
-        )
+        # Apply threshold to get binary image
+        _, binary = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
         return binary
 
@@ -169,19 +159,19 @@ class JerseyNumberRecognizer:
         return results
 
     def recognize_number(self, frame, bbox, track_id):
+        """Recognize jersey number from player bounding box
+
+        Optimized: Only 1 region + 1 image per call with early exit on good detection
         """
-        Recognize jersey number from player bounding box (Jersey + Shorts).
-        Optimized to check multiple regions with early exit on high confidence.
-        """
-        # 1. Check Cache: Ila 3ndna raqm thabet (Conf >= 3), bla ma n-3ayto l-OCR bach n-rebho l-waqt
+        # Return cached result if we have high confidence
         if track_id in self.player_jersey_cache:
-            if self.jersey_confidence.get(track_id, 0) >= 3:
+            if self.jersey_confidence.get(track_id, 0) >= 2:
                 return self.player_jersey_cache[track_id]
 
         if not self.use_paddle and self.ocr_reader is None:
             return None
 
-        # 2. Extract All Regions (Jersey Back, Chest, and Shorts)
+        # Extract jersey regions - only use first region for speed
         jersey_regions = self.extract_jersey_regions(frame, bbox)
         if not jersey_regions:
             return self.player_jersey_cache.get(track_id)
@@ -189,69 +179,69 @@ class JerseyNumberRecognizer:
         best_number = None
         best_confidence = 0
 
-        # 3. Loop over each region (Scanning for number)
-        for region in jersey_regions:
-            try:
-                # Try OCR on raw region first
-                if self.use_paddle:
-                    ocr_results = self._run_paddleocr(region)
-                else:
-                    ocr_results = self._run_easyocr(region)
+        # OPTIMIZED: Only try first region with original image (1 OCR call)
+        # If no detection, try preprocessed on first region (2nd OCR call max)
+        jersey_region = jersey_regions[0]
 
-                # Process results
+        try:
+            # First try: original image (faster, often works)
+            if self.use_paddle:
+                ocr_results = self._run_paddleocr(jersey_region)
+            else:
+                ocr_results = self._run_easyocr(jersey_region)
+
+            for (number_str, confidence) in ocr_results:
+                try:
+                    num = int(number_str)
+                    if 1 <= num <= 99 and confidence > 0.3:  # Higher threshold for speed
+                        best_number = num
+                        best_confidence = confidence
+                        break  # Early exit on first good detection
+                except ValueError:
+                    continue
+
+            # Second try: preprocessed image only if no detection
+            if best_number is None:
+                processed = self.preprocess_for_ocr(jersey_region)
+                if self.use_paddle:
+                    ocr_results = self._run_paddleocr(processed)
+                else:
+                    ocr_results = self._run_easyocr(processed)
+
                 for (number_str, confidence) in ocr_results:
-                    if number_str.isdigit():
+                    try:
                         num = int(number_str)
-                        if 1 <= num <= 99 and confidence > 0.4:
+                        if 1 <= num <= 99 and confidence > 0.3:
                             best_number = num
                             best_confidence = confidence
-                            break # Found a valid number in this region
+                            break
+                    except ValueError:
+                        continue
 
-                # If no number found, try Pre-processing (Binary/CLAHE)
-                if best_number is None:
-                    processed = self.preprocess_for_ocr(region)
-                    ocr_results = self._run_paddleocr(processed) if self.use_paddle else self._run_easyocr(processed)
-                    
-                    for (number_str, confidence) in ocr_results:
-                        if number_str.isdigit():
-                            num = int(number_str)
-                            if 1 <= num <= 99 and confidence > 0.4:
-                                best_number = num
-                                best_confidence = confidence
-                                break
+        except Exception:
+            pass
 
-                # Early Exit: Ila lqina numra b confidence tal3a, bla ma n-kemlo l-ga3 l-manatiq l-okhrin
-                if best_number is not None and best_confidence > 0.6:
-                    break
-
-            except Exception as e:
-                continue
-
-        # 4. Update Cache and Voting Logic
         if best_number is not None:
             ocr_type = "PaddleOCR" if self.use_paddle else "EasyOCR"
-            
+            sys.stderr.write(f"[{ocr_type}] Detected jersey #{best_number} for player {track_id} (conf: {best_confidence:.2f})\n")
+
+            # Update cache
             if track_id not in self.player_jersey_cache:
                 self.player_jersey_cache[track_id] = best_number
                 self.jersey_confidence[track_id] = 1
             elif self.player_jersey_cache[track_id] == best_number:
-                # Same number: Increase confidence
                 self.jersey_confidence[track_id] += 1
             else:
-                # Different number: Decrease confidence before switching
+                # Different number detected, reduce confidence
                 self.jersey_confidence[track_id] -= 1
                 if self.jersey_confidence[track_id] <= 0:
                     self.player_jersey_cache[track_id] = best_number
                     self.jersey_confidence[track_id] = 1
-            
-            # Log discovery
-            if self.jersey_confidence[track_id] == 1:
-                sys.stderr.write(f"[{ocr_type}] Player {track_id} assigned Jersey #{best_number}\n")
-            
+
             return best_number
 
         return self.player_jersey_cache.get(track_id)
-    
+
     def get_player_name(self, team_id, jersey_number):
         """Get player name from teams configuration"""
         if not jersey_number or not self.teams_config:

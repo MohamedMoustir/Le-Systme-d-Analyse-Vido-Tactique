@@ -7,15 +7,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class Auth {
-  
+
   private ApiUrl = `${environment.apiUrl}/auth`;
   private http = inject(HttpClient);
 
-  register(userData: any) :Observable<any> {
+  register(userData: any): Observable<any> {
     return this.http.post(`${this.ApiUrl}/register`, userData);
   }
 
-  login(credentials: any) :Observable<any> {
-    return this.http.post(`${this.ApiUrl}/login`, credentials );
+  login(credentials: any): Observable<any> {
+    return this.http.post(`${this.ApiUrl}/login`, credentials);
+  }
+
+  getProfile(): Observable<any> {
+   return this.http.get(`${this.ApiUrl}/me`);
   }
 }

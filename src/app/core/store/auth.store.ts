@@ -64,28 +64,33 @@ export const AuthStore = signalStore(
             )
         ),
         register: rxMethod<any>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true, error: null })),
-        switchMap((userData) =>
-          authService.register(userData).pipe(
-            tapResponse({
-              next: () => {
-                patchState(store, { isLoading: false, error: null });
-                router.navigate(['/login']);
-              },
-              error: (err: any) => {
-                const errorMessage = err?.error?.message || 'Erreur lors de l\'inscription. Veuillez réessayer.';
-                patchState(store, { isLoading: false, error: errorMessage });
-              },
-            })
-          )
-        )
-      )
-    ),
+            pipe(
+                tap(() => patchState(store, { isLoading: true, error: null })),
+                switchMap((userData) =>
+                    authService.register(userData).pipe(
+                        tapResponse({
+                            next: () => {
+                                patchState(store, { isLoading: false, error: null });
+                                router.navigate(['/login']);
+                            },
+                            error: (err: any) => {
+                                const errorMessage = err?.error?.message || 'Erreur lors de l\'inscription. Veuillez réessayer.';
+                                patchState(store, { isLoading: false, error: errorMessage });
+                            },
+                        })
+                    )
+                )
+            )
+        ),
         logout: () => {
             localStorage.removeItem('token');
-            patchState(store, { user: null, token: null ,role:null});
+            patchState(store, { user: null, token: null, role: null });
             router.navigate(['/login']);
+        },
+        setUser: (user: any) => {
+            patchState(store, { user, isLoading: false });
         }
+
     })
+
     ))

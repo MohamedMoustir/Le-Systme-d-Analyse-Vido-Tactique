@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Video Analyzer</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- SockJS and STOMP for WebSocket -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Football Video Analyzer</h1>
+            <p>Analyse de matchs de football en temps reel avec IA</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel: Video + Stats Below -->
+            <div class="video-panel">
+                <div class="panel-header">
+                    <h2>Video</h2>
+                    <div class="status-indicator" id="statusIndicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Pret</span>
+                    </div>
+                </div>
+
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-content">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <p>Glissez une video ici ou cliquez pour selectionner</p>
+                        <p class="upload-hint">Formats: MP4, AVI, MOV</p>
+                    </div>
+                    <input type="file" id="videoInput" accept="video/*" hidden>
+                </div>
+
+                <!-- Video Player -->
+                <div class="video-container" id="videoContainer" style="display: none;">
+                    <div class="video-tabs">
+                        <button class="video-tab active" id="originalVideoTab" onclick="showOriginalVideo()">Video Originale</button>
+                        <button class="video-tab" id="liveStreamTab" onclick="showLiveStream()" disabled>Live Stream</button>
+                        <!-- Video Annotee tab removed - feature disabled -->
+                    </div>
+                    <!-- Original Video Player -->
+                    <video id="videoPlayer" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                    </video>
+                    <!-- Live Stream Image -->
+                    <div id="liveStreamContainer" style="display: none;">
+                        <img id="liveStreamImg" alt="Live Stream" style="width: 100%; aspect-ratio: 16/9; object-fit: contain; background: #000;">
+                        <div id="streamLoadingOverlay" class="stream-loading-overlay">
+                            <div class="loading-spinner"></div>
+                            <p>Chargement du modele IA...</p>
+                        </div>
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            <span>LIVE</span>
+                        </div>
+                    </div>
+                    <div class="annotated-video-info" id="annotatedVideoInfo" style="display: none;">
+                        <div class="annotation-legend">
+                            <span class="legend-item"><span class="legend-color team1"></span> Equipe 1</span>
+                            <span class="legend-item"><span class="legend-color team2"></span> Equipe 2</span>
+                            <span class="legend-item"><span class="legend-color ball-holder"></span> Porteur du ballon</span>
+                            <span class="legend-item"><span class="legend-color ball"></span> Ballon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="deviceSelect">Device:</label>
+                        <select id="deviceSelect">
+                            <option value="cpu">CPU</option>
+                            <option value="cuda">GPU (CUDA)</option>
+                        </select>
+                    </div>
+                    <div class="control-buttons">
+                        <button id="startBtn" class="btn btn-primary" disabled>
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
+                            Demarrer l'analyse
+                        </button>
+                        <button id="stopBtn" class="btn btn-danger" disabled>
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="6" y="6" width="12" height="12"/>
+                            </svg>
+                            Arreter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container" id="progressContainer" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+
+                <!-- Stats Panel (moved below video) -->
+                <div class="stats-panel" id="statsPanel">
+                    <div class="panel-header">
+                        <h2>Statistiques</h2>
+                        <button id="clearLogsBtn" class="btn btn-small">Effacer logs</button>
+                    </div>
+
+                    <!-- Stats Cards (compact) -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon players-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="7" r="4"/>
+                                    <path d="M5.5 21a8.38 8.38 0 0 1 13 0"/>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="playersCount">--</span>
+                                <span class="stat-label">Joueurs</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon ball-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10"/>
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="ballStatus">--</span>
+                                <span class="stat-label">Ballon</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card team1-card">
+                            <div class="stat-icon team1-icon">T1</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="team1Possession">--%</span>
+                                <span class="stat-label">Possession</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card team2-card">
+                            <div class="stat-icon team2-icon">T2</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="team2Possession">--%</span>
+                                <span class="stat-label">Possession</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ball Holder Info (compact) -->
+                    <div class="ball-holder-card" id="ballHolderCard" style="display: none;">
+                        <h3>Porteur du ballon</h3>
+                        <div class="ball-holder-info">
+                            <div class="player-badge" id="ballHolderBadge">
+                                <span class="player-number" id="ballHolderNumber">--</span>
+                            </div>
+                            <div class="player-details">
+                                <span class="player-team" id="ballHolderTeam">--</span>
+                                <div class="player-stats">
+                                    <div class="player-stat">
+                                        <span class="stat-label">Vitesse</span>
+                                        <span class="stat-value" id="ballHolderSpeed">-- km/h</span>
+                                    </div>
+                                    <div class="player-stat">
+                                        <span class="stat-label">Distance</span>
+                                        <span class="stat-value" id="ballHolderDistance">-- m</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Players Stats (compact) -->
+                    <div class="top-players-grid">
+                        <div class="top-player-card" id="fastestPlayer" style="display: none;">
+                            <div class="top-player-icon speed-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+                                </svg>
+                            </div>
+                            <div class="top-player-info">
+                                <span class="stat-label">Plus rapide</span>
+                                <span class="stat-value">--</span>
+                                <span class="stat-detail">-- km/h</span>
+                            </div>
+                        </div>
+                        <div class="top-player-card" id="topDistance" style="display: none;">
+                            <div class="top-player-icon distance-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/>
+                                </svg>
+                            </div>
+                            <div class="top-player-info">
+                                <span class="stat-label">Plus de distance</span>
+                                <span class="stat-value">--</span>
+                                <span class="stat-detail">-- m</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Logs -->
+                    <div class="logs-container">
+                        <h3>Evenements</h3>
+                        <div class="logs-scroll" id="logsScroll">
+                            <div class="log-entry info">
+                                <span class="log-time">--:--:--</span>
+                                <span class="log-message">En attente d'une video...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Panel: Timeline -->
+            <div class="analysis-panel timeline-panel" id="timelinePanel">
+                <div class="panel-header timeline-header">
+                    <h2>Timeline - Porteurs du ballon</h2>
+                    <button id="clearTimelineBtn" class="btn btn-small">Effacer</button>
+                </div>
+                <div class="timeline-scroll" id="timelineScroll">
+                    <div class="timeline-empty" id="timelineEmpty">
+                        <p>En attente de l'analyse...</p>
+                        <p class="timeline-hint">Les changements de porteur du ballon s'afficheront ici</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Football Video Analyzer - Powered by YOLO & Spring Boot</p>
+        </footer>
+    </div>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

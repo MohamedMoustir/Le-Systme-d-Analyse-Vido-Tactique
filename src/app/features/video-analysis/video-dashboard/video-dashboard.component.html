@@ -1,123 +1,71 @@
-<div class="min-h-screen bg-gray-950 text-gray-100 font-sans">
+<div class="mb-8 flex justify-between items-end">
+  <div>
+    <h3 class="text-3xl font-black text-white tracking-tight flex items-center gap-3">
+      ANALYSE TACTIQUE
+      <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">BETA</span>
+    </h3>
+    <p class="text-slate-500 text-sm mt-1 font-mono">Session ID: <span class="text-slate-300">#{{ store.currentVideoId() || '-----' }}</span></p>
+  </div>
+
+  <div class="px-5 py-2 rounded-full border backdrop-blur-md flex items-center gap-3 transition-all"
+       [ngClass]="{
+         'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.1)]': store.status() === 'idle',
+         'bg-blue-500/10 border-blue-500/20 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)]': store.status() === 'analyzing',
+         'bg-red-500/10 border-red-500/20 text-red-400': store.status() === 'error'
+       }">
+    <span class="relative flex h-2.5 w-2.5">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-current"></span>
+      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-current"></span>
+    </span>
+    <span class="text-xs font-bold uppercase tracking-wider">{{ store.statusText() }}</span>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
   
-  <header class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex justify-between items-center shadow-md">
-    <div>
-      <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-teal-400 bg-clip-text text-transparent">
-        Football Video Analyzer
-      </h1>
-      <p class="text-xs text-gray-400">Analyse de matchs en temps réel avec IA (YOLO)</p>
-    </div>
+  <div class="xl:col-span-8 space-y-8">
     
-    <div class="flex items-center gap-3">
-      <div [ngClass]="{
-        'bg-emerald-500/10 text-emerald-500 border-emerald-500/20': status === 'idle',
-        'bg-blue-500/10 text-blue-500 border-blue-500/20 animate-pulse': status === 'analyzing',
-        'bg-red-500/10 text-red-500 border-red-500/20': status === 'error'
-      }" class="px-3 py-1 rounded-full border text-xs font-medium flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-current"></span>
-        {{ getStatusText() }}
-      </div>
-    </div>
-  </header>
-
-  <main class="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    
-    <div class="lg:col-span-8 space-y-6">
-      
-      <div class="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden shadow-xl">
-        <div class="p-4 border-b border-gray-800 flex justify-between items-center bg-gray-900/50">
-          <h2 class="font-semibold flex items-center gap-2">
-            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-            Flux Vidéo
-          </h2>
-          @if (originalVideoUrl) {
-            <button (click)="resetUpload()" class="text-xs text-red-400 hover:text-red-300 transition">Changer la vidéo</button>
-          }
-        </div>
-
-        <div class="relative aspect-video bg-black flex items-center justify-center">
-          
-          @if (!originalVideoUrl) {
-            <div class="w-full p-8">
-               <app-upload-zone (fileSelected)="onVideoSelected($event)"></app-upload-zone>
-               @if (isUploading) {
-                 <div class="mt-4 text-center text-blue-500 animate-pulse text-sm">
-                   Traitement et enregistrement dans la base de données...
-                 </div>
-               }
-            </div>
-          }
-
-          @if (originalVideoUrl && !isLiveStreaming) {
-            <video controls class="w-full h-full object-contain shadow-2xl">
-              <source [src]="originalVideoUrl" type="video/mp4">
-            </video>
-          }
-
-          @if (isLiveStreaming) {
-            <img [src]="liveStreamUrl" class="w-full h-full object-contain" />
-          }
-        </div>
-
-        <div class="p-6 bg-gray-900 flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center gap-4">
-            <div class="flex flex-col">
-              <label class="text-[10px] uppercase tracking-wider text-gray-500 mb-1 ml-1">Processeur</label>
-              <select class="bg-gray-800 border border-gray-700 text-sm rounded-lg text-white p-2.5 focus:ring-blue-500 cursor-pointer"
-                      [(ngModel)]="device">
-                <option value="cpu">CPU (Standard)</option>
-                <option value="cuda">GPU (NVIDIA CUDA)</option>
-              </select>
-            </div>
+    <div class="space-y-4">
+      @if (!store.currentVideoId()) {
+        <app-upload-zone></app-upload-zone>
+        @if (store.isUploading()) {
+          <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden mt-4">
+            <div class="bg-blue-500 h-full rounded-full animate-progress origin-left"></div>
           </div>
-
-          <div class="flex items-center gap-3">
-            <button class="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold rounded-xl transition-all shadow-lg"
-                    [disabled]="isAnalyzing || !currentVideoId"
-                    (click)="startAnalysis()">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Démarrer l'analyse
-            </button>
-            <button class="flex items-center gap-2 px-6 py-2.5 bg-gray-800 hover:bg-red-900/40 border border-gray-700 text-red-500 font-semibold rounded-xl transition-all"
-                    [disabled]="!isAnalyzing"
-                    (click)="stopAnalysis()">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
-              Arrêter
-            </button>
-          </div>
-        </div>
-
-        @if (isAnalyzing) {
-          <div class="px-6 pb-6 animate-in slide-in-from-bottom-2">
-            <div class="flex justify-between mb-2">
-              <span class="text-xs font-medium text-blue-400">Progression de l'analyse</span>
-              <span class="text-xs font-bold text-blue-400">{{ progressPercent }}%</span>
-            </div>
-            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden border border-gray-700">
-              <div class="bg-blue-500 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]" 
-                   [style.width.%]="progressPercent"></div>
-            </div>
-          </div>
+          <p class="text-center text-xs text-blue-400 mt-2 font-mono animate-pulse">{{ store.uploadMessage() }}</p>
         }
-      </div>
+      } @else {
+        <app-video-player></app-video-player>
+        
+        @if (store.isAnalyzing()) {
+           <div class="relative w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+             <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-300 shadow-[0_0_10px_rgba(59,130,246,0.5)]" 
+                  [style.width.%]="store.progressPercent()"></div>
+           </div>
+           <div class="flex justify-between text-[10px] text-blue-400 font-mono mt-1">
+             <span>TRAITEMENT EN COURS...</span>
+             <span>{{ store.progressPercent() }}%</span>
+           </div>
+        }
 
-      <app-stats-panel 
-        class="block bg-gray-900 rounded-2xl border border-gray-800 p-4 shadow-xl"
-        [frameData]="currentFrameData">
-      </app-stats-panel>
+        <app-video-controls></app-video-controls>
+      }
     </div>
 
-    <div class="lg:col-span-4 space-y-6">
-      <div class="bg-gray-900 rounded-2xl border border-gray-800 p-4 h-full min-h-[400px]">
-        <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4 px-2">Timeline des événements</h2>
+    <app-stats-panel></app-stats-panel>
+  </div>
+
+  <div class="xl:col-span-4 sticky top-6">
+    <div class="rounded-3xl bg-slate-900/40 border border-white/5 backdrop-blur-xl p-6 h-[calc(100vh-140px)] flex flex-col shadow-2xl">
+      <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mb-6 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+        Flux d'événements
+      </h2>
+      
+      <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
         <app-timeline></app-timeline>
       </div>
     </div>
-
-  </main>
-
-  <footer class="mt-auto py-6 border-t border-gray-900 text-center text-gray-600 text-xs">
-    <p>© 2026 SAVT - Developed for High Performance Tactical Analysis</p>
-  </footer>
+  </div>
 
 </div>

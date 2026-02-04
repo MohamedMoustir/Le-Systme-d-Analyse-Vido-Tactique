@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
@@ -9,100 +9,45 @@ import { StatsPanelComponent } from '../components/stats-panel/stats-panel.compo
 import { environment } from '../../../../environments/environment';
 import { timestamp } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { VideoStore } from '../../../core/store/video.store';
+import { VideoPlayerComponent } from '../components/video-player/video-player.component';
+import { VideoControlsComponent } from './video-controls/video-controls.component';
 @Component({
   selector: 'app-video-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, UploadZoneComponent, TimelineComponent, StatsPanelComponent],
+  imports: [CommonModule, FormsModule, UploadZoneComponent, TimelineComponent, StatsPanelComponent,VideoPlayerComponent, 
+    StatsPanelComponent,VideoControlsComponent],
   templateUrl: './video-dashboard.component.html'
 })
 export class VideoDashboardComponent {
-  currentVideoId: string | null = null;
-  currentVideoPath: string | null = null;
-  originalVideoUrl: string | null = null;
-  liveStreamUrl: SafeUrl | null = null;
-  isUploading = false;
-  isAnalyzing = false;
-  uploadMessage = '';
-  status: 'idle' | 'analyzing' | 'error' = 'idle';
-  device: string = 'cpu';
-  isLiveStreaming = false;
-  progressPercent: number = 0;
-  currentFrameData: FrameAnalysis | null = null;
-  streamUrl = `${environment.streamUrl}?t=${new Date().getTime()}`;
-  constructor(private apiService: ApiService,private sanitizer: DomSanitizer) { }
+  readonly store = inject(VideoStore);
+  private sanitizer = inject(DomSanitizer);
 
+  
+  liveStreamSafeUrl = computed(() => {
+    const rawUrl = this.store.streamRawUrl();
+    return rawUrl ? this.sanitizer.bypassSecurityTrustUrl(rawUrl) : null;
+  });
+
+  constructor() { }
   onVideoSelected(file: File) {
-    this.isUploading = true;
-    this.apiService.uploadVideo(file).subscribe({
-      next: (res) => {
-        this.isUploading = false;
-        this.currentVideoId = res.id;
-        this.currentVideoPath = res.urlFichier;
-        this.originalVideoUrl = `${environment.uploadsUrl}/${res.urlFichier}`;
-      },
-      error: (err) => {
-        this.isUploading = false;
-        console.error("Upload error", err);
-      }
-    });
+   this.store.uploadVideo(file);
   }
 
   startAnalysis(): void {
-    if (!this.currentVideoId) return;
-
-    this.isAnalyzing = true;
-    this.status = 'analyzing';
-    this.uploadMessage = "Démarrage de l'analyse...";
-    this.progressPercent = 0;
-
-    this.apiService.startAnalysis(this.currentVideoId).subscribe({
-      next: (res) => {
-        console.log('Analysis started:', res);
-        this.isAnalyzing = true;
-        this.isLiveStreaming = true;
-        const timeTag = Date.now();
-        const rawUrl = `${environment.streamUrl}/mjpeg?videoPath=${this.currentVideoPath}&videoId=${this.currentVideoId}&t=${timeTag}`;
-        this.liveStreamUrl = this.sanitizer.bypassSecurityTrustUrl(rawUrl);
-        this.simulateProgress();
-      },
-      error: (err) => {
-        this.status = 'error';
-        this.isAnalyzing = false;
-        console.error('Analysis failed to start', err);
-      }
-    });
+    this?.store.startAnalysis();
   }
-  simulateProgress() {
-    const intrval = setInterval(() => {
-      if (this.progressPercent >= 100) {
-        clearInterval(intrval);
-      } else {
-        this.progressPercent += 5;
-      }
-    }, 1000);
-  }
-
+  
   stopAnalysis() {
-    this.apiService.stopAnalysis().subscribe(() => {
-      this.isAnalyzing = false;
-      this.status = 'idle';
-      this.isLiveStreaming = false;
-    });
-  }
-
-  getStatusText(): string {
-    switch (this.status) {
-      case 'idle': return 'Prêt';
-      case 'analyzing': return 'Analyse en cours...';
-      case 'error': return 'Erreur';
-      default: return 'En attente';
-    }
+    this.store.stopAnalysis()
   }
 
   resetUpload() {
-    this.originalVideoUrl = null;
-    this.currentVideoId = null;
-    this.status = 'idle';
-    this.progressPercent = 0;
+    this.store.resetUpload();
   }
+  updateDevice(event: Event) {
+  const value = (event.target as HTMLSelectElement).value;
+  // this.store.setDevice(value); 
+  console.log("Device changed to:", value);
+}
 }

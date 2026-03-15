@@ -1,0 +1,104 @@
+<button 
+  (click)="toggleMenu()"
+  class="lg:hidden fixed top-5 left-5 z-60 p-2 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-xl text-white shadow-2xl transition-all active:scale-95">
+  @if (!isMenuOpen()) {
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  } @else {
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  }
+</button>
+
+@if (isMenuOpen()) {
+  <div 
+    (click)="toggleMenu()" 
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity">
+  </div>
+}
+
+<aside
+  [class.translate-x-0]="isMenuOpen()"
+  [class.-translate-x-full]="!isMenuOpen()"
+  class="w-72 h-screen bg-slate-900/90 backdrop-blur-xl border-r border-white/5 flex flex-col fixed left-0 top-0 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.4)] transition-transform duration-300 ease-in-out lg:translate-x-0">
+
+  <div class="h-20 flex items-center px-8 border-b border-white/5">
+    <div class="w-8 h-8 rounded bg-linear-to-br from-blue-500 to-cyan-400 flex items-center justify-center mr-3 shadow-lg shadow-blue-500/20">
+      <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+      </svg>
+    </div>
+    <h1 class="text-lg font-bold text-white tracking-wide">SAVT <span class="text-blue-400 font-light">Pro</span></h1>
+  </div>
+
+  <nav class="flex-1 py-8 px-4 space-y-2 overflow-y-auto">
+    <a routerLink="/analysis" (click)="isMenuOpen() ? toggleMenu() : null"
+      routerLinkActive="bg-gradient-to-r from-blue-600/20 to-cyan-600/10 text-blue-400 border-l-4 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.1)]"
+      [routerLinkActiveOptions]="{exact: true}"
+      class="flex items-center gap-4 px-4 py-3.5 text-sm font-medium text-slate-400 rounded-r-xl hover:bg-white/5 transition-all group">
+      <svg class="w-5 h-5 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      </svg>
+      Tableau de bord
+    </a>
+
+    <a routerLink="/bibliotheque" (click)="isMenuOpen() ? toggleMenu() : null"
+      routerLinkActive="bg-gradient-to-r from-blue-600/20 to-cyan-600/10 text-blue-400 border-l-4 border-blue-500"
+      class="flex items-center gap-4 px-4 py-3.5 text-sm font-medium text-slate-500 rounded-r-xl hover:bg-white/5 hover:text-slate-300 transition-all group">
+      <svg class="w-5 h-5 group-hover:text-slate-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+      Bibliothèque Vidéo
+    </a>
+
+    <a routerLink="/rapport" (click)="isMenuOpen() ? toggleMenu() : null"
+      routerLinkActive="bg-gradient-to-r from-blue-600/20 to-cyan-600/10 text-blue-400 border-l-4 border-blue-500"
+      class="flex items-center gap-4 px-4 py-3.5 text-sm font-medium text-slate-500 rounded-r-xl hover:bg-white/5 hover:text-slate-300 transition-all group">
+      <svg class="w-5 h-5 group-hover:text-slate-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+      </svg>
+      Rapports & Stats
+    </a>
+
+    <a routerLink="/team" (click)="isMenuOpen() ? toggleMenu() : null"
+      routerLinkActive="bg-gradient-to-r from-blue-600/20 to-cyan-600/10 text-blue-400 border-l-4 border-blue-500"
+      class="flex items-center gap-4 px-4 py-3.5 text-sm font-medium text-slate-500 rounded-r-xl hover:bg-white/5 hover:text-slate-300 transition-all group">
+      <svg class="w-5 h-5 group-hover:text-slate-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+      Mon Équipe
+    </a>
+
+    <a routerLink="/subscription" (click)="isMenuOpen() ? toggleMenu() : null"
+      routerLinkActive="bg-gradient-to-r from-amber-600/20 to-yellow-600/10 text-amber-400 border-l-4 border-amber-500"
+      class="flex items-center gap-4 px-4 py-3.5 text-sm font-medium text-slate-500 rounded-r-xl hover:bg-white/5 hover:text-slate-300 transition-all group">
+      <svg class="w-5 h-5 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+      Abonnement
+    </a>
+
+    <button (click)="onLogout()"
+      class="w-full flex items-center gap-4 px-4 py-3.5 text-sm font-medium text-slate-500 rounded-r-xl hover:bg-red-500/10 hover:text-red-400 hover:border-l-4 hover:border-red-500 transition-all group cursor-pointer text-left">
+      <svg class="w-5 h-5 group-hover:text-red-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+      </svg>
+      <span class="font-semibold">Déconnexion</span>
+    </button>
+  </nav>
+
+  <div class="p-6 border-t border-white/5">
+    @if (userProfile(); as user) {
+      <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+        <img [src]="'https://ui-avatars.com/api/?name=' + user.nom + '&background=0D8ABC&color=fff'" 
+             class="w-9 h-9 rounded-lg" alt="Avatar">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-bold text-white truncate capitalize">{{ user.nom }}</p>
+          <p class="text-[10px] font-medium text-cyan-400">{{ user.role }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</aside>

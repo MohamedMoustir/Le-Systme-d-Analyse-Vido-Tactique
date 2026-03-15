@@ -1,0 +1,101 @@
+<div class="p-8 max-w-7xl mx-auto space-y-8 relative">
+  
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Gestion des Utilisateurs</h1>
+      <p class="text-slate-400 mt-1">Gérez les accès, les rôles et recherchez des coachs spécifiques.</p>
+    </div>
+    <div class="flex gap-4">
+      <button (click)="loadUsers()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors border border-white/10 flex items-center gap-2">
+        <span>🔄</span> Actualiser
+      </button>
+      <button (click)="isCreating.set(true)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg shadow-blue-500/20 flex items-center gap-2">
+        <span>+</span> Nouvel Utilisateur
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-slate-900/50 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden shadow-2xl">
+    
+    <div class="p-6 border-b border-white/10 flex items-center justify-between bg-slate-800/30">
+      <h2 class="text-xl font-bold text-white">Base de données ({{ filteredUsers().length }})</h2>
+      
+      <div class="relative w-72">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+        <input type="text" 
+               [ngModel]="searchQuery()" 
+               (ngModelChange)="searchQuery.set($event)"
+               class="w-full bg-slate-900 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder-slate-500 text-sm" 
+               placeholder="Rechercher par nom ou email...">
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-300">
+        <thead class="bg-slate-800/80 text-xs uppercase text-slate-400 tracking-wider">
+          <tr>
+            <th class="px-6 py-5">Utilisateur</th>
+            <th class="px-6 py-5">Rôle</th>
+            <th class="px-6 py-5">Statut</th>
+            <th class="px-6 py-5 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          
+          @if (isLoading()) {
+            <tr><td colspan="4" class="px-6 py-8 text-center text-slate-400">Chargement...</td></tr>
+          }
+
+          @for (user of filteredUsers(); track user.id) {
+            <tr class="hover:bg-slate-800/40 transition-colors group">
+              <td class="px-6 py-4">
+                <div class="font-bold text-white text-base flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-blue-400 border border-white/10">
+                    {{ user.nom.charAt(0).toUpperCase() }}
+                  </div>
+                  <div>
+                    <div>{{ user.nom }}</div>
+                    <div class="text-slate-500 text-xs font-normal mt-0.5">{{ user.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <button (click)="onChangeRole(user)" 
+                        class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-full border transition-all hover:scale-105"
+                        [ngClass]="user.role === 'ADMIN' ? 'bg-purple-500/10 text-purple-400 border-purple-500/30' : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30'">
+                  {{ user.role }}
+                </button>
+              </td>
+              <td class="px-6 py-4">
+                <button (click)="onToggleStatus(user)" 
+                        class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-full border transition-all hover:scale-105"
+                        [ngClass]="user.activated ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'bg-red-500/10 text-red-400 border-red-500/30'">
+                  {{ user.activated ? 'Actif' : 'Bloqué' }}
+                </button>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <button (click)="onDeleteUser(user.id, user.nom)" class="text-red-400 hover:text-red-300 font-medium text-xs px-3 py-1.5 rounded bg-red-500/10 hover:bg-red-500/20 transition-colors border border-red-500/20 opacity-0 group-hover:opacity-100">
+                  🗑️ Supprimer
+                </button>
+              </td>
+            </tr>
+          }
+
+          @if (!isLoading() && filteredUsers().length === 0) {
+            <tr><td colspan="4" class="px-6 py-8 text-center text-slate-500">Aucun utilisateur trouvé.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  @if (isCreating()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <app-user-create 
+        (cancel)="isCreating.set(false)" 
+        (userCreated)="isCreating.set(false); loadUsers()">
+      </app-user-create>
+    </div>
+  }
+
+</div>

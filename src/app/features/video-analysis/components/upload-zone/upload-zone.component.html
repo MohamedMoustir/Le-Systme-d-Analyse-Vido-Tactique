@@ -1,0 +1,33 @@
+<div (click)="openFileDialog(fileInput)"
+     (drop)="onDrop($event)"
+     (dragover)="onDragOver($event)"
+     (dragleave)="onDragLeave()"
+     [ngClass]="isDragover() 
+        ? 'border-blue-500 bg-blue-500/5 shadow-[0_0_30px_rgba(59,130,246,0.2)] scale-[1.01]' 
+        : 'border-white/10 hover:border-blue-500/30 hover:bg-white/5'"
+     class="group relative w-full h-72 rounded-2xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center cursor-pointer overflow-hidden">
+
+  <input #fileInput type="file" accept="video/*" class="hidden" (change)="onFileSelected($event)">
+
+  <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.02)_50%,transparent_75%,transparent_100%)] bg-[length:20px_20px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+  <div class="relative w-20 h-20 mb-6 rounded-full bg-slate-800/50 flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-300">
+    <div class="absolute inset-0 rounded-full border border-blue-500/0 group-hover:border-blue-500/50 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all"></div>
+    
+    <svg class="w-10 h-10 text-slate-500 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+    </svg>
+  </div>
+
+  <div class="text-center relative z-10">
+    <p class="text-lg font-bold text-slate-300 group-hover:text-white transition-colors">
+      Glissez votre vidéo ici
+    </p>
+    <p class="text-sm text-slate-500 mt-2 font-mono group-hover:text-blue-400 transition-colors">
+      <span class="text-blue-500">Explorer</span> les fichiers
+    </p>
+    <p class="text-xs text-slate-600 mt-4 px-3 py-1 rounded-full bg-slate-900/50 inline-block border border-white/5">
+      MP4, MOV • Max 2GB
+    </p>
+  </div>
+</div>

@@ -38,9 +38,6 @@ spring:
       auto-index-creation: false
 
 
-
-
-
 python:
   executable: C:/Users/safiy/Documents/OneDrive/Bureau/savt-fullstack/python/venv/Scripts/python.exe
   script:

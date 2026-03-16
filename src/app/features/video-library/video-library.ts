@@ -20,7 +20,7 @@ export class VideoLibraryComponent implements OnInit {
   }
 
   getVideoUrl(video: any): string {
-    let url = `http://165.232.38.245/api/videos/play/${video.id}`;
+    let url = `http://savt-vision.live/api/videos/play/${video.id}`;
      console.log(url);
     
     return url;

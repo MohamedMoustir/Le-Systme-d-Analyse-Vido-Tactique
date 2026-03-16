@@ -9,21 +9,27 @@ server:
 spring:
   application:
     name: savt-backend
+
   boot:
     admin:
       client:
         url: http://localhost:8081
         instance:
           prefer-ip: true
+
+
   servlet:
     multipart:
       max-file-size: 5GB
       max-request-size: 5GB
+
   thymeleaf:
     cache: false
+
   mvc:
     async:
       request-timeout: -1
+
   data:
     redis:
       host: localhost
@@ -32,7 +38,6 @@ spring:
       uri: mongodb://localhost:27017/savt_db
       auto-index-creation: false
 
-# ======= هنا فين كاين الفرق (مسارات السيرفر) =======
 python:
   executable: /root/clean_python/venv/bin/python3
   script:
@@ -40,12 +45,11 @@ python:
 
 yolo:
   model:
-    path: /root/clean_python/models/yolov8m_soccer.pt
+    path: /root/clean_python/models/yolov8n.pt
 
 teams:
   config:
     path: /root/clean_python/config/teams.json
-# =====================================================
 
 upload:
   path: uploads
@@ -69,7 +73,7 @@ stripe:
   api:
     key: ${STRIPE_API_KEY:sk_test_51RWDUjCi3z7Q48KgQ3u9zwCm4v41mBQy9WDq8isWyKGbsAEFKIIgVBUtnUpFoqPRE4EYLnAcLTexwjIEZnRMWutf00iZjG8dsv}
   webhook:
-    secret: ${STRIPE_WEBHOOK_SECRET:whsec_45de67346867af465df856ab21b91adc24bdb9783dc21a6a43b90a491726650e}
+    secret: ${STRIPE_WEBHOOK_SECRET:whsec_wBGAE70rX3DZvTPAxE00fOt5wn3SuCRk}
   price:
     premium: ${STRIPE_PREMIUM_PRICE_ID:price_1T95CdCi3z7Q48KgbAzflaaD}
 

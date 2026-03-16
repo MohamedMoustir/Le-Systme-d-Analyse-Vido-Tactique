@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Autowired
     private JwtService jwtService;
 
-    Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

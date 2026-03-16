@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -43,7 +44,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> toggleUserStatus(@PathVariable String id) {
         userServise.toggleUserActivation(id);
-        return ResponseEntity.ok().body("Statut de l'utilisateur mis à jour");
+        return ResponseEntity.ok().body(Map.of("message", "Statut de l'utilisateur mis à jour"));
     }
 
     @PatchMapping("/{id}/role")

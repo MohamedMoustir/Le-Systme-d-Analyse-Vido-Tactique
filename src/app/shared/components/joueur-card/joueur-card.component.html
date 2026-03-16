@@ -1,7 +1,10 @@
 <div class="group relative h-[420px] rounded-[2.5rem] overflow-hidden bg-[#0b1120] border border-white/10 hover:border-blue-500/50 transition-all duration-500 shadow-2xl hover:-translate-y-2">
   <div class="absolute inset-0 z-0">
-    <img [src]="joueur.photoUrl || 'https://ui-avatars.com/api/?name=' + joueur.nomComplet + '&background=070b14&color=38bdf8'" 
-         class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110">
+    <img #imgProfile
+     [src]="getCorrectImageUrl(joueur.photoUrl) || ('https://ui-avatars.com/api/?name=' + joueur.nomComplet + '&background=070b14&color=38bdf8')" 
+     (error)="imgProfile.src = 'https://ui-avatars.com/api/?name=' + joueur.nomComplet + '&background=070b14&color=38bdf8'"
+     class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+     alt="Photo">
     <div class="absolute inset-0 bg-gradient-to-t from-[#070b14] via-[#070b14]/40 to-transparent"></div>
   </div>
 

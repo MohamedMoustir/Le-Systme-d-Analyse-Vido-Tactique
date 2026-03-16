@@ -14,4 +14,18 @@ export class JoueurCardComponent {
 
   onDelete() { this.delete.emit(this.joueur.id); }
   onEdit() { this.edit.emit(this.joueur); }
+
+getCorrectImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  
+  if (url.includes('localhost:8080')) {
+    return url.replace('http://localhost:8080', 'https://savt-vision.live/api');
+  }
+  
+  if (!url.startsWith('http')) {
+    return `https://savt-vision.live/api/uploads/${url}`; 
+  }
+
+  return url;
+}
 }

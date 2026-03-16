@@ -18,12 +18,12 @@ export class TeamComponent implements OnInit {
   private joueurService = inject(JoueurService);
   private equipeService = inject(EquipeService);
   readonly store = inject(EquipeStore);
-  
+
   isModalOpen = signal(false);
   editingJoueurId = signal<number | null>(null);
   photoPreview = signal<string | null>(null);
 
-  selectedFile: File | null = null; 
+  selectedFile: File | null = null;
 
   joueurForm = this.fb.group({
     nomComplet: ['', [Validators.required]],
@@ -46,7 +46,7 @@ export class TeamComponent implements OnInit {
     this.editingJoueurId.set(null);
     this.joueurForm.reset();
     this.photoPreview.set(null);
-    this.selectedFile = null; 
+    this.selectedFile = null;
     this.isModalOpen.set(true);
   }
 
@@ -59,7 +59,7 @@ export class TeamComponent implements OnInit {
       photoUrl: joueur.photoUrl
     });
     this.photoPreview.set(joueur.photoUrl);
-    this.selectedFile = null; 
+    this.selectedFile = null;
     this.isModalOpen.set(true);
   }
 
@@ -77,7 +77,7 @@ export class TeamComponent implements OnInit {
     if (this.joueurForm.invalid) return;
 
     const formData = new FormData();
-    
+
     const nomComplet = this.joueurForm.get('nomComplet')?.value || '';
     const poste = this.joueurForm.get('poste')?.value || '';
     const numeroMaillot = this.joueurForm.get('numeroMaillot')?.value;
@@ -100,8 +100,8 @@ export class TeamComponent implements OnInit {
     } else {
       this.store.addSingleJoueur(formData as any);
     }
-    
-    this.closeModal(); 
+
+    this.closeModal();
   }
 
   onPhotoSelected(event: Event): void {
@@ -110,8 +110,8 @@ export class TeamComponent implements OnInit {
 
     if (fileList && fileList.length > 0) {
       const file = fileList[0];
-      
-      this.selectedFile = file; 
+
+      this.selectedFile = file;
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -129,5 +129,9 @@ export class TeamComponent implements OnInit {
       this.store.importCsv(file);
       element.value = '';
     }
+  }
+
+  openTeamCreationModal() {
+    console.log('Open Team Creation Form');
   }
 }

@@ -17,6 +17,7 @@ spring:
         instance:
           prefer-ip: true
 
+
   servlet:
     multipart:
       max-file-size: 5GB

@@ -37,7 +37,6 @@ spring:
       uri: mongodb://localhost:27017/savt_db
       auto-index-creation: false
 
-
 python:
   executable: /root/clean_python/venv/bin/python3
   script:
@@ -45,7 +44,7 @@ python:
 
 yolo:
   model:
-    path: /root/clean_python/models/yolov8m_soccer.pt
+    path: /root/clean_python/models/yolov8n.pt
 
 teams:
   config:

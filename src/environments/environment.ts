@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
  apiUrl: 'https://savt-vision.live/api',
   uploadsUrl: 'https://savt-vision.live/uploads',
   streamUrl: 'https://savt-vision.live/api/analysis/stream',

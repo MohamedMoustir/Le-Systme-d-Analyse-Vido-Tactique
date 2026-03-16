@@ -48,17 +48,15 @@ public class StreamController {
         this.videoRepository = videoRepository;
     }
 
-    @GetMapping(value = "/stream/mjpeg")
+    @GetMapping(value = "/api/analysis/stream/mjpeg")
     public void streamMjpeg(
             @RequestParam String videoPath,
             @RequestParam(required = false) String videoId,
             @RequestParam(defaultValue = "cpu") String device,
             HttpServletResponse response) {
 
-        // 1. كنسجلو الـ ID ديال الفيديو ملي كيبدا الستريم
         currentVideoId.set(videoId);
 
-        // كنحبسو أي ستريم قديم، بلا ما نحدثو الداتابيز دابا
         stopStreamInternal(false);
 
         response.setContentType("multipart/x-mixed-replace; boundary=frame");
@@ -97,7 +95,6 @@ public class StreamController {
 
             streamProcess = pb.start();
 
-            // Thread اللي كيقرى الإحصائيات من Python
             new Thread(() -> {
                 try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(streamProcess.getErrorStream(), "UTF-8"))) {
                     String line;
@@ -129,7 +126,6 @@ public class StreamController {
                 }
             }).start();
 
-            // قراءة الصور (Frames) من Python
             InputStream inputStream = new BufferedInputStream(streamProcess.getInputStream());
             OutputStream outputStream = response.getOutputStream();
             ByteArrayOutputStream frameBuffer = new ByteArrayOutputStream();
@@ -173,7 +169,6 @@ public class StreamController {
         } catch (Exception e) {
             logger.error("Streaming error: {}", e.getMessage());
         } finally {
-            // 2. ملي كيسالي الستريم، كنعطيو الميثود الـ ID ديريكت باش تحدث الداتابيز
             updateVideoStatusToTermine(videoId);
             stopStreamInternal(false);
         }
@@ -181,7 +176,6 @@ public class StreamController {
 
     @PostMapping("/api/stream/stop")
     public ResponseEntity<String> stopStreamApi() {
-        // 3. ملي اليوزر كيكليكي على Stop، كنجبدو الـ ID وكنحدثو الداتابيز قبل ما نقتلو Python
         String videoId = currentVideoId.get();
         if (videoId != null) {
             updateVideoStatusToTermine(videoId);
@@ -190,7 +184,6 @@ public class StreamController {
         return ResponseEntity.ok("{\"success\": true}");
     }
 
-    // ميثود داخلية باش نحبسو بايثون بلا ما نتسببو فـ حلقة مفرغة
     private void stopStreamInternal(boolean clearId) {
         isStreaming.set(false);
         if (streamProcess != null) {
@@ -203,7 +196,6 @@ public class StreamController {
         }
     }
 
-    // 4. الميثود الجديدة اللي كتاخد الـ ID وكترد الفيديو TERMINE وتزيد _analyzed
     private void updateVideoStatusToTermine(String videoId) {
         if (videoId == null || videoId.trim().isEmpty()) {
             return;

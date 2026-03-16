@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Autowired
     private JwtService jwtService;
 
-    @Bean
+    Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**", "/api/public/**", "/ws-analysis/**",
                                 "/uploads/**", "/api/videos/play/**", "/api/analysis/stream/**",
-                                "/api/stripe/webhook").permitAll()
+                                "/api/stream/stop", "/api/stripe/webhook").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
@@ -55,10 +55,11 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
         configuration.setAllowCredentials(true);
@@ -67,7 +68,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

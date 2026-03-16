@@ -35,6 +35,7 @@ public class JWTFilter  extends OncePerRequestFilter {
         return path.equals("/api/auth/login") ||
                 path.equals("/api/auth/register") ||
                 path.startsWith("/api/public/") ||
+                path.startsWith("/api/analysis/stream/") ||
                 path.startsWith("/api/stream/") ||
                 path.startsWith("/stream/") ||
                 path.startsWith("/api/stripe/webhook") ||

@@ -39,20 +39,20 @@ spring:
 
 
 python:
-  executable: C:/Users/safiy/Documents/OneDrive/Bureau/savt-fullstack/python/venv/Scripts/python.exe
+  executable: /root/clean_python/venv/bin/python3
   script:
-    path: C:/Users/safiy/Documents/OneDrive/Bureau/savt-fullstack/python/main.py
+    path: /root/clean_python/main.py
 
 yolo:
   model:
-    path: C:/Users/safiy/Documents/OneDrive/Bureau/savt-fullstack/python/models/yolov8m_soccer.pt
+    path: /root/clean_python/models/yolov8m_soccer.pt
 
 teams:
   config:
-    path: C:/Users/safiy/Documents/OneDrive/Bureau/savt-fullstack/python/config/teams.json
+    path: /root/clean_python/config/teams.json
 
 upload:
-  path: uploads
+  path: /root/backend-deploy/uploads
 
 logging:
   level:
@@ -73,7 +73,7 @@ stripe:
   api:
     key: ${STRIPE_API_KEY:sk_test_51RWDUjCi3z7Q48KgQ3u9zwCm4v41mBQy9WDq8isWyKGbsAEFKIIgVBUtnUpFoqPRE4EYLnAcLTexwjIEZnRMWutf00iZjG8dsv}
   webhook:
-    secret: ${STRIPE_WEBHOOK_SECRET:whsec_45de67346867af465df856ab21b91adc24bdb9783dc21a6a43b90a491726650e}
+    secret: ${STRIPE_WEBHOOK_SECRET:whsec_wBGAE70rX3DZvTPAxE00fOt5wn3SuCRk}
   price:
     premium: ${STRIPE_PREMIUM_PRICE_ID:price_1T95CdCi3z7Q48KgbAzflaaD}
 

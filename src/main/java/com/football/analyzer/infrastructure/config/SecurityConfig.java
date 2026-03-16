@@ -41,8 +41,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**", "/api/public/**", "/ws-analysis/**",
-                                "/uploads/**", "/api/videos/play/**", "/stream/mjpeg/**",
-                                "/api/stream/**", "/api/stripe/webhook").permitAll()
+                                "/uploads/**", "/api/videos/play/**", "/api/analysis/stream/**",
+                                "/api/stripe/webhook").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
@@ -55,7 +55,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

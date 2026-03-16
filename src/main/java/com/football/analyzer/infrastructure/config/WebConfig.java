@@ -26,10 +26,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Serve uploaded videos
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:" + uploadPath + "/");
+        registry.addResourceHandler("/api/uploads/**")
+                .addResourceLocations("file:" + uploadPath + "/")
+                .setCachePeriod(0);
         registry.addResourceHandler("/videos/**")
-                .addResourceLocations("file:videos/");
+                .addResourceLocations("file:videos/")
+                .setCachePeriod(0);;
     }
 
 

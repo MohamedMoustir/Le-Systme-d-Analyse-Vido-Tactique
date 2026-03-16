@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**", "/api/public/**", "/ws-analysis/**",
-                                "/uploads/**", "/api/videos/play/**", "/api/analysis/stream/**",
+                                "api/uploads/**", "/api/videos/play/**", "/api/analysis/stream/**",
                                 "/api/stream/stop", "/api/stripe/webhook").permitAll()
                         .anyRequest().authenticated()
                 )

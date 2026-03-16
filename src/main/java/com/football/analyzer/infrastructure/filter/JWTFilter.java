@@ -38,6 +38,7 @@ public class JWTFilter  extends OncePerRequestFilter {
                 path.startsWith("/api/analysis/stream/") ||
                 path.startsWith("/api/stream/") ||
                 path.startsWith("/stream/") ||
+                path.startsWith("/api/uploads/") ||
                 path.startsWith("/api/stream/stop") ||
                 path.startsWith("/api/stripe/webhook") ||
                 path.startsWith("/ws-analysis/");

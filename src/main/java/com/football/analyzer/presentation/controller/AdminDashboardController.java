@@ -1,7 +1,7 @@
 package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.AdminDashboardService;
-import com.football.analyzer.presentation.dto.response.DashboardStatsResponse;
+import com.football.analyzer.presentation.dto.Response.DashboardStatsResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

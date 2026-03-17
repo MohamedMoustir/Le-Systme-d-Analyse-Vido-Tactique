@@ -4,7 +4,7 @@ import com.football.analyzer.application.service.JoueurService;
 import com.football.analyzer.domain.entity.Joueur;
 import com.football.analyzer.domain.exception.ResourceNotFoundException;
 import com.football.analyzer.domain.repository.JoueurRepository;
-import com.football.analyzer.presentation.dto.response.JoueurResponseDTO;
+import com.football.analyzer.presentation.dto.Response.JoueurResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

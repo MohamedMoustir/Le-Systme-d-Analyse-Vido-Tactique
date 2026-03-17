@@ -8,8 +8,8 @@ import com.football.analyzer.domain.repository.UserRepository;
 import com.football.analyzer.infrastructure.service.AutheticatedUser;
 import com.football.analyzer.infrastructure.service.JwtService;
 import com.football.analyzer.infrastructure.service.RefreshTokenService;
-import com.football.analyzer.presentation.dto.request.RegisterRequest;
-import com.football.analyzer.presentation.dto.response.LoginResponse;
+import com.football.analyzer.presentation.dto.Request.RegisterRequest;
+import com.football.analyzer.presentation.dto.Response.LoginResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new DuplicateResourceException("User already exist with Email :" + registerRequest.getEmail());
         }
-        User user = User.builder().email(registerRequest.getEmail()).password(passwordEncoder.encode(registerRequest.getPassword())).nom(registerRequest.getNom()).isActivated(true).role(Role.valueOf(registerRequest.getRole())).build();
+        User user = User.builder().email(registerRequest.getEmail()).password(passwordEncoder.encode(registerRequest.getPassword())).nom(registerRequest.getNom()).activated(true).role(Role.valueOf(registerRequest.getRole())).build();
         userRepository.save(user);
 
         String roles = String.valueOf(user.getRole());

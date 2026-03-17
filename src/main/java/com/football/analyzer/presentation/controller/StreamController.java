@@ -7,7 +7,7 @@ import com.football.analyzer.application.service.VideoService;
 import com.football.analyzer.domain.entity.VideoMetadata;
 import com.football.analyzer.domain.enums.StatutAnalyse;
 import com.football.analyzer.domain.repository.VideoRepository;
-import com.football.analyzer.presentation.dto.response.FrameAnalysisDTO;
+import com.football.analyzer.presentation.dto.Response.FrameAnalysisDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

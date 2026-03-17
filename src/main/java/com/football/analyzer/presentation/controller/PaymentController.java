@@ -2,7 +2,7 @@ package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.utils.UserUtils;
 import com.football.analyzer.infrastructure.service.StripeService;
-import com.football.analyzer.presentation.dto.request.CheckoutSessionRequest;
+import com.football.analyzer.presentation.dto.Request.CheckoutSessionRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ package com.football.analyzer.application.mapper;
 import com.football.analyzer.domain.entity.Equipe;
 import com.football.analyzer.domain.entity.MatchStatistics;
 import com.football.analyzer.domain.entity.VideoMetadata;
-import com.football.analyzer.presentation.dto.response.VideoResponse;
+import com.football.analyzer.presentation.dto.Response.VideoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

@@ -5,7 +5,7 @@ import com.football.analyzer.domain.enums.Role;
 import com.football.analyzer.domain.repository.UserRepository;
 import com.football.analyzer.domain.repository.VideoRepository;
 import com.football.analyzer.domain.repository.EquipeRepository;
-import com.football.analyzer.presentation.dto.response.DashboardStatsResponse;
+import com.football.analyzer.presentation.dto.Response.DashboardStatsResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

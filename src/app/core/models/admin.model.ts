@@ -31,7 +31,6 @@ export interface EquipeAdminDTO {
   couleurPrimaire: string; 
 }
 
-// ── Payment & Subscription ─────────────────────────────────────────
 
 export interface PaymentStats {
   totalRevenue: number;

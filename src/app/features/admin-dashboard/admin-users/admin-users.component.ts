@@ -48,6 +48,8 @@ export class AdminUsersComponent implements OnInit {
 
   onToggleStatus(user: UserResponseDTO) {
     if(confirm(`Voulez-vous ${user.activated ? 'bloquer' : 'débloquer'} ${user.nom} ?`)) {
+      console.log('========>',user.activated);
+      
       this.adminService.toggleUserStatus(user.id).subscribe({
         next: () => {
           this.users.update(list => list.map(u => u.id === user.id ? { ...u, activated: !u.activated } : u));

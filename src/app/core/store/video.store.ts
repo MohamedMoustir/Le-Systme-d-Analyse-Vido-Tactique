@@ -147,7 +147,7 @@ export const VideoStore = signalStore(
                   const errorCode = err?.status ?? null;
                   patchState(store, { isUploading: false, status: 'error', uploadMessage: 'Erreur upload', uploadErrorCode: errorCode });
                   toastService.error('Erreur lors de l\'upload', 'Erreur');
-                }
+                } 
               })
             )
           )

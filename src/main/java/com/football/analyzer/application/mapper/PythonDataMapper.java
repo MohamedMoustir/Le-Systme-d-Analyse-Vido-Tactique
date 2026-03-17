@@ -2,9 +2,9 @@ package com.football.analyzer.application.mapper;
 
 
 import com.football.analyzer.domain.entity.MatchStatistics;
-import com.football.analyzer.presentation.dto.response.FrameAnalysisDTO;
+import com.football.analyzer.presentation.dto.Response.FrameAnalysisDTO;
 import com.football.analyzer.domain.entity.PositionData;
-import com.football.analyzer.presentation.dto.response.PlayerDataDTO;
+import com.football.analyzer.presentation.dto.Response.PlayerDataDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

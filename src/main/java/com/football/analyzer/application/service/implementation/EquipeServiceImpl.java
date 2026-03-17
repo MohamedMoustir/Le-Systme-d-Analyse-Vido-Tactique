@@ -7,7 +7,7 @@ import com.football.analyzer.domain.entity.Joueur;
 import com.football.analyzer.domain.exception.BusinessLogicException;
 import com.football.analyzer.domain.repository.EquipeRepository;
 import com.football.analyzer.domain.repository.JoueurRepository;
-import com.football.analyzer.presentation.dto.response.EquipeResponse;
+import com.football.analyzer.presentation.dto.Response.EquipeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

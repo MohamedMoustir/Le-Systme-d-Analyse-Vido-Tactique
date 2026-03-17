@@ -6,8 +6,8 @@ import com.football.analyzer.domain.entity.User;
 import com.football.analyzer.domain.enums.Role;
 import com.football.analyzer.domain.exception.ResourceNotFoundException;
 import com.football.analyzer.domain.repository.UserRepository;
-import com.football.analyzer.presentation.dto.request.UserUpdateDTO;
-import com.football.analyzer.presentation.dto.response.UserResponseDTO;
+import com.football.analyzer.presentation.dto.Request.UserUpdateDTO;
+import com.football.analyzer.presentation.dto.Response.UserResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

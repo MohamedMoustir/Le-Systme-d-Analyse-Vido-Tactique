@@ -1,4 +1,4 @@
-package com.football.analyzer.presentation.dto.response;
+package com.football.analyzer.presentation.dto.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class RapportGlobalResponse {
     @AllArgsConstructor
     public static class DernierMatch {
         private String adversaire;
-        private String resultat;  // "V", "N", ou "D"
+        private String resultat;
         private String score;
         private Double possession;
     }

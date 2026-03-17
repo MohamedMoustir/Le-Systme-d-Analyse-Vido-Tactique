@@ -2,9 +2,9 @@ package com.football.analyzer.application.service;
 
 
 import com.football.analyzer.domain.entity.VideoMetadata;
-import com.football.analyzer.presentation.dto.request.VideoUploadRequest;
-import com.football.analyzer.presentation.dto.response.FrameAnalysisDTO;
-import com.football.analyzer.presentation.dto.response.VideoResponse;
+import com.football.analyzer.presentation.dto.Response.FrameAnalysisDTO;
+import com.football.analyzer.presentation.dto.Request.VideoUploadRequest;
+import com.football.analyzer.presentation.dto.Response.VideoResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

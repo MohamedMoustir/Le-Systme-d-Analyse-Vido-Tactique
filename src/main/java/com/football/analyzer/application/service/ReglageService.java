@@ -1,6 +1,6 @@
 package com.football.analyzer.application.service;
 
-import com.football.analyzer.presentation.dto.response.ReglageDTO;
+import com.football.analyzer.presentation.dto.Response.ReglageDTO;
 
 public interface ReglageService {
     ReglageDTO getReglages(String userId);

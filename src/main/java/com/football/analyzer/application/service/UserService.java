@@ -1,8 +1,8 @@
 package com.football.analyzer.application.service;
 
 import com.football.analyzer.domain.entity.User;
-import com.football.analyzer.presentation.dto.request.UserUpdateDTO;
-import com.football.analyzer.presentation.dto.response.UserResponseDTO;
+import com.football.analyzer.presentation.dto.Request.UserUpdateDTO;
+import com.football.analyzer.presentation.dto.Response.UserResponseDTO;
 
 
 import java.util.List;

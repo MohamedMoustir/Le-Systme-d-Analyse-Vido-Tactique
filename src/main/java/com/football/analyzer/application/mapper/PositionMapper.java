@@ -1,7 +1,7 @@
 package com.football.analyzer.application.mapper;
 
 import com.football.analyzer.domain.entity.PositionData;
-import com.football.analyzer.presentation.dto.response.PositionResponse;
+import com.football.analyzer.presentation.dto.Response.PositionResponse;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

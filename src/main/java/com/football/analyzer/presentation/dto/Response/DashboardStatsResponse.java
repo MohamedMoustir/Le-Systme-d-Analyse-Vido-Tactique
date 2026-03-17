@@ -1,4 +1,4 @@
-package com.football.analyzer.presentation.dto.response;
+package com.football.analyzer.presentation.dto.Response;
 
 import lombok.Builder;
 import lombok.Data;

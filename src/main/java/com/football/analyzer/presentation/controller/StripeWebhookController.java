@@ -28,13 +28,10 @@ public class StripeWebhookController {
     private final StripeService stripeService;
     private final ObjectMapper objectMapper;
 
-    @Value("${stripe.webhook.secret:whsec_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}")
+    @Value("${stripe.webhook.secret}")
     private String webhookSecret;
 
-    /**
-     * Webhook pour recevoir les événements Stripe
-     * URL: POST /api/stripe/webhook
-     */
+
     @PostMapping("/webhook")
     public ResponseEntity<String> handleStripeWebhook(
             @RequestBody String payload,
@@ -43,7 +40,6 @@ public class StripeWebhookController {
         Event event;
 
         try {
-            // Vérifier la signature du webhook
             event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
         } catch (SignatureVerificationException e) {
             log.error("Signature webhook invalide: {}", e.getMessage());

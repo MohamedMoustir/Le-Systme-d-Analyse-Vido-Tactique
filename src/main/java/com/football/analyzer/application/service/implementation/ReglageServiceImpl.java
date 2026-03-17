@@ -5,7 +5,7 @@ import com.football.analyzer.domain.entity.Equipe;
 import com.football.analyzer.domain.entity.User;
 import com.football.analyzer.domain.repository.EquipeRepository;
 import com.football.analyzer.domain.repository.UserRepository;
-import com.football.analyzer.presentation.dto.response.ReglageDTO;
+import com.football.analyzer.presentation.dto.Response.ReglageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

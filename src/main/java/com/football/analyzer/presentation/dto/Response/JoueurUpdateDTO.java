@@ -1,4 +1,4 @@
-package com.football.analyzer.presentation.dto.response;
+package com.football.analyzer.presentation.dto.Response;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

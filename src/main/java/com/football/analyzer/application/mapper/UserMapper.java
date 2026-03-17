@@ -2,9 +2,9 @@ package com.football.analyzer.application.mapper;
 
 
 import com.football.analyzer.domain.entity.User;
-import com.football.analyzer.presentation.dto.request.UserRequestDTO;
-import com.football.analyzer.presentation.dto.request.UserUpdateDTO;
-import com.football.analyzer.presentation.dto.response.UserResponseDTO;
+import com.football.analyzer.presentation.dto.Request.UserRequestDTO;
+import com.football.analyzer.presentation.dto.Request.UserUpdateDTO;
+import com.football.analyzer.presentation.dto.Response.UserResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;

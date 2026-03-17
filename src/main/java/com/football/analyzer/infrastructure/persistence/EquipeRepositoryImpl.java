@@ -28,8 +28,6 @@ public class EquipeRepositoryImpl implements EquipeRepository {
         return repo.findAll();
     }
 
-
-
     @Override
     public void deleteById(String id) {
      repo.deleteById(id);

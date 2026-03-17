@@ -4,7 +4,7 @@ import com.football.analyzer.domain.entity.User;
 import com.football.analyzer.domain.entity.VideoMetadata;
 import com.football.analyzer.domain.repository.UserRepository;
 import com.football.analyzer.domain.repository.VideoRepository;
-import com.football.analyzer.presentation.dto.response.VideoAdminDTO;
+import com.football.analyzer.presentation.dto.Response.VideoAdminDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

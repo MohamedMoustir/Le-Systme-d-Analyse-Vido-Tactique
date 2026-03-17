@@ -1,8 +1,8 @@
 package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.implementation.AdminEquipeService;
-import com.football.analyzer.presentation.dto.request.EquipeCreateDTO;
-import com.football.analyzer.presentation.dto.response.EquipeAdminDTO;
+import com.football.analyzer.presentation.dto.Request.EquipeCreateDTO;
+import com.football.analyzer.presentation.dto.Response.EquipeAdminDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

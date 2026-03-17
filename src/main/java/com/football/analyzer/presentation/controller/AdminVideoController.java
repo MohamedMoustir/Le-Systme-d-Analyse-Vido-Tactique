@@ -1,7 +1,7 @@
 package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.implementation.AdminVideoService;
-import com.football.analyzer.presentation.dto.response.VideoAdminDTO;
+import com.football.analyzer.presentation.dto.Response.VideoAdminDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

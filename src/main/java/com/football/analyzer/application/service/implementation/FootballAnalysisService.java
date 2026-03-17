@@ -5,7 +5,7 @@ import com.football.analyzer.domain.entity.VideoMetadata;
 import com.football.analyzer.domain.enums.StatutAnalyse;
 import com.football.analyzer.domain.repository.PositionRepository;
 import com.football.analyzer.domain.repository.VideoRepository;
-import com.football.analyzer.presentation.dto.response.FrameAnalysisDTO;
+import com.football.analyzer.presentation.dto.Response.FrameAnalysisDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,13 +45,13 @@ public class FootballAnalysisService {
     @Async
     public void startAnalysis(String videoId) {
         if (isRunning.get()) {
-            log.warn("⚠️ Analysis already running. Please wait.");
+            log.warn("Analysis already running. Please wait.");
             return;
         }
 
         VideoMetadata video = videoRepository.findById(videoId).orElse(null);
         if (video == null) {
-            log.error("❌ Video not found: {}", videoId);
+            log.error("Video not found: {}", videoId);
             return;
         }
 
@@ -77,7 +77,7 @@ public class FootballAnalysisService {
             );
             pb.redirectErrorStream(true);
 
-            log.info("🚀 Starting Python Analysis for Video: {}", videoId);
+            log.info("Starting Python Analysis for Video: {}", videoId);
             Process process = pb.start();
 
             activeProcesses.put(videoId, process);
@@ -85,7 +85,6 @@ public class FootballAnalysisService {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    // Filter Logs
                     if (!line.trim().startsWith("{")) {
                         log.debug("[PYTHON]: {}", line);
                         continue;
@@ -96,7 +95,7 @@ public class FootballAnalysisService {
                         messagingTemplate.convertAndSend("/topic/analysis/" + videoId, dto);
                         videoService.processAnalysisMessage(videoId, dto);
                     } catch (Exception e) {
-                        log.warn("⚠️ Failed to parse Python JSON: {}", line);
+                        log.warn(" Failed to parse Python JSON: {}", line);
                     }
                 }
             }
@@ -106,18 +105,18 @@ public class FootballAnalysisService {
 
             File annotatedVideoFile = new File(outputPath);
             if (annotatedVideoFile.exists() && annotatedVideoFile.length() > 0) {
-                log.info("✅ Annotated video successfully created and saved!");
+                log.info(" Annotated video successfully created and saved!");
 
                 video.setUrlFichier(annotatedFileName);
 
                 updateStatus(video, StatutAnalyse.TERMINE);
             } else {
-                log.error("❌ Python finished (Code: {}), but annotated video was NOT created.", exitCode);
+                log.error("Python finished (Code: {}), but annotated video was NOT created.", exitCode);
                 updateStatus(video, StatutAnalyse.ERREUR);
             }
 
         } catch (Exception e) {
-            log.error("❌ Analysis Exception", e);
+            log.error(" Analysis Exception", e);
             updateStatus(video, StatutAnalyse.ERREUR);
         } finally {
             isRunning.set(false);
@@ -128,11 +127,11 @@ public class FootballAnalysisService {
     public void stopAnalysis(String videoId) {
         Process process = activeProcesses.get(videoId);
         if (process != null && process.isAlive()) {
-            log.info("🛑 Stopping Analysis for Video: {}", videoId);
+            log.info("Stopping Analysis for Video: {}", videoId);
 
             process.destroy();
         } else {
-            log.warn("⚠️ No active process found for video: {}", videoId);
+            log.warn(" No active process found for video: {}", videoId);
         }
     }
 

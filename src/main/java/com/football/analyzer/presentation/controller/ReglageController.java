@@ -1,7 +1,7 @@
 package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.ReglageService;
-import com.football.analyzer.presentation.dto.response.ReglageDTO;
+import com.football.analyzer.presentation.dto.Response.ReglageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

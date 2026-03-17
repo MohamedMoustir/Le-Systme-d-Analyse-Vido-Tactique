@@ -24,10 +24,10 @@ public class DataSeeder implements CommandLineRunner {
         String salt = BCrypt.gensalt();
         String hashedPassword = BCrypt.hashpw("Admin1234", salt);
         User users = User.builder()
-               .nom("ADMIN")
+                .nom("ADMIN")
                 .email("admin@savatVideo.com")
                 .password(hashedPassword)
-                .isActivated(true)
+                .activated(true)
                 .role(Role.ADMIN)
                 .build();
         userRepository.save(users);

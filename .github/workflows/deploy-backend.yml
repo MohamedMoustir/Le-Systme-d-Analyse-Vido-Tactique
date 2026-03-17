@@ -16,7 +16,8 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd ~/backend-deploy
-            git pull origin master  
-            mvn clean package -DskipTests
-            cp target/*.jar ~/app.jar
-            sudo systemctl restart savt-backend
+            sudo systemctl stop savt-backend    
+            git pull origin master              
+            mvn clean package -DskipTests      
+            cp target/*.jar ~/app.jar          
+            sudo systemctl start savt-backend

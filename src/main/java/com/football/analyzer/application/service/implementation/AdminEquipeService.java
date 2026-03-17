@@ -2,8 +2,8 @@ package com.football.analyzer.application.service.implementation;
 
 import com.football.analyzer.domain.entity.Equipe;
 import com.football.analyzer.domain.repository.EquipeRepository;
-import com.football.analyzer.presentation.dto.request.EquipeCreateDTO;
-import com.football.analyzer.presentation.dto.response.EquipeAdminDTO;
+import com.football.analyzer.presentation.dto.Request.EquipeCreateDTO;
+import com.football.analyzer.presentation.dto.Response.EquipeAdminDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

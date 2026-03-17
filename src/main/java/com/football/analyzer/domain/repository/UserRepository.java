@@ -13,7 +13,7 @@ public interface UserRepository {
     User save(User user);
     Optional<User> findById(String id);
     List<User> findAll();
-     int count();
+    int count();
     void delete(User user);
 
 }

@@ -126,7 +126,7 @@ public class VideoServiceImpl implements VideoService {
             return VideoResponse.builder()
                     .id(saved.getId())
                     .titre(saved.getTitre())
-                    .urlFichier(saved.getUrlFichier())
+                    .urlFichier("/api/uploads/" + saved.getUrlFichier())
                     .statut(saved.getStatut().name())
                     .build();
 

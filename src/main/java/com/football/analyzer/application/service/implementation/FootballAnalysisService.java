@@ -107,7 +107,7 @@ public class FootballAnalysisService {
             if (annotatedVideoFile.exists() && annotatedVideoFile.length() > 0) {
                 log.info(" Annotated video successfully created and saved!");
 
-                video.setUrlFichier(annotatedFileName);
+                video.setUrlFichier("/api/uploads/" + annotatedFileName);
 
                 updateStatus(video, StatutAnalyse.TERMINE);
             } else {

@@ -2,8 +2,8 @@ package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.VideoService;
 import com.football.analyzer.application.service.implementation.FootballAnalysisService;
-import com.football.analyzer.presentation.dto.request.VideoUploadRequest;
-import com.football.analyzer.presentation.dto.response.VideoResponse;
+import com.football.analyzer.presentation.dto.Request.VideoUploadRequest;
+import com.football.analyzer.presentation.dto.Response.VideoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

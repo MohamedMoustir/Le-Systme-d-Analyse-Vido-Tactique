@@ -2,14 +2,14 @@ package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.EquipeService;
 import com.football.analyzer.domain.entity.User;
-import com.football.analyzer.presentation.dto.response.EquipeResponse;
+import com.football.analyzer.presentation.dto.Response.EquipeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.security.Principal; // 🔴 ضروري تزيد هادي
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/equipes")

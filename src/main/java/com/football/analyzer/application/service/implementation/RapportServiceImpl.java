@@ -5,7 +5,7 @@ import com.football.analyzer.domain.entity.Equipe;
 import com.football.analyzer.domain.entity.VideoMetadata;
 import com.football.analyzer.domain.repository.EquipeRepository;
 import com.football.analyzer.domain.repository.VideoRepository;
-import com.football.analyzer.presentation.dto.response.RapportGlobalResponse;
+import com.football.analyzer.presentation.dto.Response.RapportGlobalResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ public class RapportServiceImpl implements RapportService {
 
     @Override
     public RapportGlobalResponse getMyStats(String userId) {
-        log.info("📊 Fetching stats for user: {}", userId);
+        log.info(" Fetching stats for user: {}", userId);
 
         List<VideoMetadata> videos = videoRepository.findByUploaderId(userId);
 
-        log.info("✅ Total videos found for user {}: {}", userId, videos.size());
+        log.info(" Total videos found for user {}: {}", userId, videos.size());
 
         Equipe equipe = equipeRepository.findByUserId(userId).orElse(null);
 

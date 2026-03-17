@@ -12,8 +12,8 @@ public interface EquipeRepository  {
         Optional<Equipe> findById(String id);
         List<Equipe> findAll();
         void deleteById(String id);
-         long count();
-    Optional<Equipe> findByUserId(String userId);
+        long count();
+        Optional<Equipe> findByUserId(String userId);
 
 }
 

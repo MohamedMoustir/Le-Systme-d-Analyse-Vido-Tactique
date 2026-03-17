@@ -39,8 +39,7 @@ public class JoueurServiceImpl implements JoueurService {
             Files.createDirectories(path.getParent());
             Files.write(path, photo.getBytes());
 
-            String newPhotoUrl = "http://localhost:8080/uploads/" + fileName;
-
+            String newPhotoUrl = "/uploads/" + fileName;
             existingJoueur.setPhotoUrl(newPhotoUrl);
         }
 

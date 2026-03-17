@@ -68,7 +68,7 @@ public class EquipeServiceImpl implements EquipeService {
             Path path = Paths.get(UPLOAD_DIR + fileName);
             Files.createDirectories(path.getParent());
             Files.write(path, photo.getBytes());
-            photoUrl = "http://localhost:8080/uploads/" + fileName;
+            photoUrl = "/uploads/" + fileName;
         }
 
         Joueur joueur = Joueur.builder()

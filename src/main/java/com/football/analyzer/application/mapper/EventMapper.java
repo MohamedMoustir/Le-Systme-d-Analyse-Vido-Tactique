@@ -1,7 +1,7 @@
 package com.football.analyzer.application.mapper;
 
 import com.football.analyzer.domain.entity.EvenementMatch;
-import com.football.analyzer.presentation.dto.response.EventResponse;
+import com.football.analyzer.presentation.dto.Response.EventResponse;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

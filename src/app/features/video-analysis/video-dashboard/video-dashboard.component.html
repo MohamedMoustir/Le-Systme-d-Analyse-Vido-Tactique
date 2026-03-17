@@ -35,7 +35,7 @@
           <p class="text-center text-xs text-blue-400 mt-2 font-mono animate-pulse">{{ store.uploadMessage() }}</p>
         }
       } @else {
-        <app-video-player></app-video-player>
+        <app-video-player   [src]="liveStreamSafeUrl()"></app-video-player>
 
         @if (store.isAnalyzing()) {
           <div class="relative w-full h-1 bg-slate-800 rounded-full overflow-hidden">

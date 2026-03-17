@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges, computed, effect, inject, s
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../../environments/environment';
 import { VideoStore } from '../../../../core/store/video.store';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-video-player',
@@ -14,14 +14,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class VideoPlayerComponent {
   readonly store = inject(VideoStore);
   private sanitizer = inject(DomSanitizer);
-
+  @Input() src: string | SafeUrl | null = null;
 
   activeTab = signal<'original' | 'live'>('original');
   isStreamImageLoading = signal(true);
-  safeStreamUrl = computed(() => {
-    const rawUrl = this.store.streamRawUrl();
-    return rawUrl ? this.sanitizer.bypassSecurityTrustUrl(rawUrl) : null;
-  });
+  // safeStreamUrl = computed(() => {
+  //   const rawUrl = this.store.streamRawUrl();
+  //   return rawUrl ? this.sanitizer.bypassSecurityTrustUrl(rawUrl) : null;
+  // });
 
   constructor() {
     effect(() => {
@@ -45,7 +45,9 @@ export class VideoPlayerComponent {
 
     this.activeTab.set('original');
   }
-
+  safeStreamUrl() {
+    return this.src;
+  }
   showLiveStream(): void {
     if (!this.store.currentVideoPath()) return;
 

@@ -40,9 +40,11 @@
 
     @if (activeTab() === 'original') {
       @if (store.originalVideoUrl()) {
-        <video class="w-full h-full object-contain relative z-10" controls>
-          <source [src]="store.originalVideoUrl()" type="video/mp4">
-        </video>
+        <video class="w-full h-full object-contain relative z-10" 
+           [src]="src" 
+           controls 
+           crossorigin="anonymous">
+    </video>
       } @else {
         <div class="text-center space-y-2 relative z-10">
           <div class="w-16 h-16 mx-auto rounded-full bg-slate-800/50 flex items-center justify-center border border-white/10">

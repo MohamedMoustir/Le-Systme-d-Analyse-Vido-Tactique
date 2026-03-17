@@ -17,15 +17,22 @@ export class JoueurCardComponent {
 
 getCorrectImageUrl(url: string | null | undefined): string | null {
   if (!url) return null;
-  
-  if (url.includes('localhost:8080')) {
-    return url.replace('http://localhost:8080', 'https://savt-vision.live/api');
-  }
-  
-  if (!url.startsWith('http')) {
-    return `https://savt-vision.live/api/uploads/${url}`; 
+
+  if (url.startsWith('http') && !url.includes('localhost')) {
+    return url;
   }
 
-  return url;
+  let cleanPath = url.replace('http://localhost:8080', '');
+  
+  if (!cleanPath.startsWith('/uploads/')) {
+    cleanPath = '/uploads/' + (cleanPath.startsWith('/') ? cleanPath.substring(1) : cleanPath);
+  }
+
+  if (window.location.hostname === 'localhost') {
+    return `https://savt-vision.live/api${cleanPath}`;
+  }
+
+ 
+  return `/api${cleanPath}`;
 }
 }

@@ -126,11 +126,18 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  // liveStreamSafeUrl = computed(() => {
+  //   const rawUrl = this.store.streamRawUrl();
+  //   return rawUrl ? this.sanitizer.bypassSecurityTrustUrl(rawUrl) : null;
+  // });
   liveStreamSafeUrl = computed(() => {
-    const rawUrl = this.store.streamRawUrl();
-    return rawUrl ? this.sanitizer.bypassSecurityTrustUrl(rawUrl) : null;
-  });
+  const rawUrl = this.store.originalVideoUrl(); 
+  if (!rawUrl) return null;
+
+  const cleanUrl = this.getFullVideoUrl(rawUrl);
   
+  return cleanUrl ? this.sanitizer.bypassSecurityTrustUrl(cleanUrl) : null;
+});
 
   onVideoSelected(file: File) {
     this.showLimitModal.set(false);
@@ -199,4 +206,21 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
       this.wsSubscription.unsubscribe();
     }
   }
+
+private getFullVideoUrl(path: string | null | undefined): string | null {
+  if (!path) return null;
+
+  const fileName = path.split('/').pop(); 
+  if (!fileName) return null;
+
+  const cleanApiPath = `/api/uploads/${fileName}`;
+
+  if (window.location.hostname === 'localhost') {
+    return `https://savt-vision.live${cleanApiPath}`;
+  }
+
+  return cleanApiPath; 
+}
+
+  
 }

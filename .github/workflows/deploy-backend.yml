@@ -1,0 +1,23 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Spring Boot to VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd ~/backend-deploy
+            git pull origin backend  
+            mvn clean package -DskipTests
+            cp target/*.jar ~/app.jar
+            sudo systemctl restart savt-backend

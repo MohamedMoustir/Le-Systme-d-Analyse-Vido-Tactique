@@ -52,7 +52,7 @@ teams:
     path: /root/clean_python/config/teams.json
 
 upload:
-  path: uploads
+  path: /root/backend-deploy/uploads/
 
 logging:
   level:

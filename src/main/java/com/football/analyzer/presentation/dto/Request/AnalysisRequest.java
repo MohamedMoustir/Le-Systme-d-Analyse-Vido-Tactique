@@ -1,4 +1,4 @@
-package com.football.analyzer.presentation.dto.request;
+package com.football.analyzer.presentation.dto.Request;
 
 import lombok.Data;
 

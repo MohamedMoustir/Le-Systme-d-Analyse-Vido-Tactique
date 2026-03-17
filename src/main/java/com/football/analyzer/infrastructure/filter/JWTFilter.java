@@ -43,6 +43,7 @@ public class JWTFilter  extends OncePerRequestFilter {
                 path.startsWith("/api/stripe/webhook") ||
                 path.startsWith("/ws-analysis/");
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 

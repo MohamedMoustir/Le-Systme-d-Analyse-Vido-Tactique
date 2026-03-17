@@ -3,7 +3,8 @@ name: Deploy Backend
 on:
   push:
     branches:
-      - master
+      - master # تأكد واش سميتها master ولا main فـ GitHub
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,11 +15,18 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: root
           password: ${{ secrets.SERVER_PASSWORD }}
+          script_stop: true
           script: |
             cd ~/backend-deploy
-            sudo systemctl stop savt-backend    
+            
+            sudo systemctl stop savt-backend || true
+            
             git fetch --all
             git reset --hard origin/master
-            mvn clean package -DskipTests      
-            cp target/*.jar ~/app.jar          
-            sudo systemctl start savt-backend
+            
+            mvn clean package -DskipTests
+            
+            cp target/*.jar ~/app.jar
+            
+            sudo systemctl daemon-reload
+            sudo systemctl restart savt-backend

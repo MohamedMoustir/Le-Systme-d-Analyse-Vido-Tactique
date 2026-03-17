@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PositionRepository  {
-
     void deleteByVideoId(String videoId);
     List<PositionData> saveAll( List<PositionData> positionData);
     Optional<PositionData> findById(String id);

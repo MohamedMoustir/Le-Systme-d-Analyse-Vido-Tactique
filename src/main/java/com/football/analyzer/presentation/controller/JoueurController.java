@@ -2,7 +2,7 @@ package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.JoueurService;
 import com.football.analyzer.domain.entity.Joueur;
-import com.football.analyzer.presentation.dto.response.JoueurResponseDTO;
+import com.football.analyzer.presentation.dto.Response.JoueurResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

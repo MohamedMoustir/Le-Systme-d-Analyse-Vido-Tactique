@@ -3,7 +3,7 @@ package com.football.analyzer.presentation.controller;
 import com.football.analyzer.application.service.RapportService;
 import com.football.analyzer.domain.entity.User;
 import com.football.analyzer.domain.repository.UserRepository;
-import com.football.analyzer.presentation.dto.response.RapportGlobalResponse;
+import com.football.analyzer.presentation.dto.Response.RapportGlobalResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

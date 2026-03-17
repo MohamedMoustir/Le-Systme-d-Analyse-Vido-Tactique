@@ -1,6 +1,6 @@
 package com.football.analyzer.application.service;
 
-import com.football.analyzer.presentation.dto.response.EquipeResponse;
+import com.football.analyzer.presentation.dto.Response.EquipeResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface EquipeService {

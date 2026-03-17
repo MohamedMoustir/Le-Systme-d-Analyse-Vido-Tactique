@@ -43,8 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**", "/api/public/**", "/ws-analysis/**",
                                 "/api/videos/play/**", "/api/analysis/stream/**",
-                                "/api/stripe/webhook").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/uploads/**").permitAll()
+                                "/api/stripe/webhook","/api/stream/stop","/api/uploads/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

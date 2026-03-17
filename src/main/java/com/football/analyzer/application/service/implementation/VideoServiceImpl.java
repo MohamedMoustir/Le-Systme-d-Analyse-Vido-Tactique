@@ -14,10 +14,10 @@ import com.football.analyzer.domain.repository.EvenementMatchRepository;
 import com.football.analyzer.domain.repository.PositionRepository;
 import com.football.analyzer.domain.repository.UserRepository;
 import com.football.analyzer.domain.repository.VideoRepository;
-import com.football.analyzer.presentation.dto.request.VideoUploadRequest;
-import com.football.analyzer.presentation.dto.response.FrameAnalysisDTO;
-import com.football.analyzer.presentation.dto.response.PlayerDataDTO;
-import com.football.analyzer.presentation.dto.response.VideoResponse;
+import com.football.analyzer.presentation.dto.Response.FrameAnalysisDTO;
+import com.football.analyzer.presentation.dto.Request.VideoUploadRequest;
+import com.football.analyzer.presentation.dto.Response.PlayerDataDTO;
+import com.football.analyzer.presentation.dto.Response.VideoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +55,7 @@ public class VideoServiceImpl implements VideoService {
     private final org.springframework.messaging.simp.SimpMessagingTemplate messagingTemplate;
     private final java.util.Map<String, Integer> lastGoalFrameMap = new java.util.concurrent.ConcurrentHashMap<>();
     private static final int GOAL_FRAME_COOLDOWN = 300;
+
     public void processAnalysisMessage(String videoId, FrameAnalysisDTO dto) {
         if (dto == null || dto.getType() == null) return;
 
@@ -78,14 +79,12 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public VideoResponse uploadAndSave(MultipartFile file, VideoUploadRequest request, String userId) {
-        // Vérifier le plan d'abonnement de l'utilisateur
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'ID: " + userId));
 
         SubscriptionPlan userPlan = user.getPlan() != null ? user.getPlan() : SubscriptionPlan.FREE;
         long currentVideoCount = metadataRepository.countByUploaderId(userId);
 
-        // Vérifier la limite de vidéos
         if (currentVideoCount >= userPlan.getMaxVideos()) {
             String message = userPlan == SubscriptionPlan.FREE
                 ? "Vous avez atteint la limite de vidéos pour le plan GRATUIT (1 vidéo). Passez au plan PREMIUM pour télécharger plus de vidéos."
@@ -240,8 +239,6 @@ public class VideoServiceImpl implements VideoService {
                 .FieldY(playerDto.getPositionField() != null ? playerDto.getPositionField().get(1).floatValue() : null)
                 .build();
     }
-
-
 
     private void finalizeAnalysis(String videoId, FrameAnalysisDTO dto) {
         flushBuffer();

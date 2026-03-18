@@ -1,0 +1,31 @@
+<div class="group relative h-[420px] rounded-[2.5rem] overflow-hidden bg-[#0b1120] border border-white/10 hover:border-blue-500/50 transition-all duration-500 shadow-2xl hover:-translate-y-2">
+  <div class="absolute inset-0 z-0">
+    <img #imgProfile
+     [src]="getCorrectImageUrl(joueur.photoUrl) || ('https://ui-avatars.com/api/?name=' + joueur.nomComplet + '&background=070b14&color=38bdf8')" 
+     (error)="imgProfile.src = 'https://ui-avatars.com/api/?name=' + joueur.nomComplet + '&background=070b14&color=38bdf8'"
+     class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+     alt="Photo">
+    <div class="absolute inset-0 bg-gradient-to-t from-[#070b14] via-[#070b14]/40 to-transparent"></div>
+  </div>
+
+  <div class="absolute top-4 left-6 z-10">
+    <span class="text-6xl font-black text-white/10 italic select-none">{{ joueur.numeroMaillot }}</span>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 p-8 z-10">
+    <div class="flex flex-col gap-1">
+      <span class="text-blue-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-1">{{ joueur.poste }}</span>
+      <h3 class="text-2xl font-black text-white tracking-tight uppercase leading-none">{{ joueur.nomComplet }}</h3>
+      <div class="h-1 w-12 bg-blue-500 mt-4 rounded-full transition-all duration-500 group-hover:w-full"></div>
+    </div>
+  </div>
+
+  <div class="absolute top-4 right-4 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 z-20">
+    <button (click)="onEdit()" class="p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-blue-600 transition-all">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+    </button>
+    <button (click)="onDelete()" class="p-3 rounded-xl bg-red-500/20 backdrop-blur-md border border-red-500/30 text-red-400 hover:bg-red-600 hover:text-white transition-all">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+    </button> 
+  </div>
+</div>

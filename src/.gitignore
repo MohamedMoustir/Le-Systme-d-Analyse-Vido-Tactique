@@ -1,9 +1,0 @@
-target/
-.env
-.idea/
-.settings/
-.classpath
-.project
-.factorypath
-*.class
-

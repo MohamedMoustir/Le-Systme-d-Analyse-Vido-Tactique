@@ -1,0 +1,75 @@
+<div class="fixed inset-0 z-60 flex items-center justify-center p-4" role="dialog" aria-modal="true" (click)="close()">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+  <div class="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 shadow-[0_25px_60px_rgba(0,0,0,0.6)] overflow-hidden" (click)="$event.stopPropagation()">
+    <div class="h-1 w-full bg-linear-to-r from-blue-500 to-cyan-400"></div>
+
+    <div class="p-6 space-y-5">
+      <div>
+        <h3 class="text-lg font-black text-white">Créez votre équipe</h3>
+        <p class="text-xs text-slate-500 mt-1">Vous devez créer une équipe avant de lancer l'analyse vidéo.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+        <div>
+          <label for="nomEquipe" class="mb-2 block text-sm font-medium text-slate-200">Nom de l'équipe</label>
+          <input
+            id="nomEquipe"
+            type="text"
+            formControlName="nomEquipe"
+            class="w-full rounded-xl border border-white/10 bg-slate-800/70 px-4 py-3 text-white outline-none focus:border-blue-500"
+            placeholder="Ex: Les Aigles"
+          />
+          @if (form.controls.nomEquipe.touched && form.controls.nomEquipe.invalid) {
+            <p class="mt-2 text-xs text-red-400">Veuillez saisir un nom valide (2 à 80 caractères).</p>
+          }
+        </div>
+
+        <div>
+          <label for="couleurHex" class="mb-2 block text-sm font-medium text-slate-200">Couleur (optionnel)</label>
+          <div class="flex items-center gap-3">
+            <input
+              id="couleurHex"
+              type="color"
+              formControlName="couleurHex"
+              class="h-11 w-14 cursor-pointer rounded-lg border border-white/10 bg-slate-800"
+            />
+            <input
+              type="text"
+              formControlName="couleurHex"
+              class="flex-1 rounded-xl border border-white/10 bg-slate-800/70 px-4 py-3 text-white outline-none focus:border-blue-500"
+              placeholder="#2563eb"
+            />
+          </div>
+          @if (form.controls.couleurHex.touched && form.controls.couleurHex.invalid) {
+            <p class="mt-2 text-xs text-red-400">Format attendu: #RRGGBB</p>
+          }
+        </div>
+
+        @if (errorMessage(); as error) {
+          <div class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            {{ error }}
+          </div>
+        }
+
+        <div class="flex gap-3 pt-1">
+          <button
+            type="button"
+            (click)="close()"
+            [disabled]="isSubmitting()"
+            class="flex-1 py-2.5 rounded-xl text-sm font-medium text-slate-400 bg-slate-800 hover:bg-slate-700 border border-white/5 transition-all disabled:opacity-60"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            [disabled]="isSubmitting()"
+            class="flex-1 py-2.5 rounded-xl text-sm font-bold text-white bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 transition-all disabled:opacity-60"
+          >
+            {{ isSubmitting() ? 'Création...' : 'Créer et continuer' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

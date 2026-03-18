@@ -1,0 +1,98 @@
+<div class="flex h-screen bg-[#111827] text-white">
+
+    <div class="w-72 bg-slate-800 p-4 border-r border-slate-700 flex flex-col z-20">
+        <h3 class="text-xl font-bold mb-4 text-blue-400">Banc de touche</h3>
+        <div class="flex-1 overflow-y-auto space-y-2 p-2 bg-slate-900/50 rounded-lg min-h-[200px]" cdkDropList
+            #bancList="cdkDropList" [cdkDropListData]="bancDeTouche" [cdkDropListConnectedTo]="[terrainList]"
+            (cdkDropListDropped)="drop($event)">
+
+            @for (joueur of bancDeTouche; track joueur.id) {
+            <div cdkDrag
+                class="bg-slate-700 p-2 rounded-lg flex items-center gap-3 cursor-grab hover:bg-slate-600 border border-slate-600">
+                <img [src]="joueur.photoUrl || 'assets/default-player.png'" class="w-10 h-10 rounded-full object-cover">
+                <div>
+                    <p class="text-sm font-bold">{{ joueur.nomComplet }}</p>
+                    <p class="text-[11px] text-gray-400 font-semibold">{{ joueur.poste }}</p>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+    <div class="flex-1 p-8 flex flex-col items-center justify-center relative overflow-hidden">
+        <h2 class="text-2xl font-bold mb-6">Formation & Tactique</h2>
+
+        <div #pitchContainer
+            class="relative w-full max-w-4xl aspect-[105/68] bg-[#1a7a14] border-2 border-white shadow-2xl pitch-boundary"
+            cdkDropList #terrainList="cdkDropList" [cdkDropListData]="terrainJoueurs"
+            [cdkDropListConnectedTo]="[bancList]" (cdkDropListDropped)="drop($event)">
+
+            <div
+                class="absolute top-1/2 -left-[3%] w-[3%] h-[12%] -translate-y-1/2 border-2 border-white border-r-0 pointer-events-none">
+            </div>
+            <div
+                class="absolute top-1/2 -right-[3%] w-[3%] h-[12%] -translate-y-1/2 border-2 border-white border-l-0 pointer-events-none">
+            </div>
+            <div class="absolute top-0 bottom-0 left-1/2 w-[2px] -ml-[1px] bg-white pointer-events-none"></div>
+            <div
+                class="absolute top-1/2 left-1/2 w-[18%] aspect-square -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-full pointer-events-none">
+            </div>
+            <div
+                class="absolute top-1/2 left-1/2 w-2 h-2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full pointer-events-none">
+            </div>
+
+            <div
+                class="absolute top-1/2 left-[12%] w-[12%] aspect-square -translate-y-1/2 border-2 border-white rounded-full pointer-events-none">
+            </div>
+            <div
+                class="absolute top-1/2 left-0 w-[16%] h-[58%] -translate-y-1/2 border-2 border-l-0 border-white bg-[#1a7a14] z-0 pointer-events-none">
+            </div>
+            <div
+                class="absolute top-1/2 left-0 w-[5%] h-[26%] -translate-y-1/2 border-2 border-l-0 border-white z-0 pointer-events-none">
+            </div>
+
+            <div
+                class="absolute top-1/2 right-[12%] w-[12%] aspect-square -translate-y-1/2 border-2 border-white rounded-full pointer-events-none">
+            </div>
+            <div
+                class="absolute top-1/2 right-0 w-[16%] h-[58%] -translate-y-1/2 border-2 border-r-0 border-white bg-[#1a7a14] z-0 pointer-events-none">
+            </div>
+            <div
+                class="absolute top-1/2 right-0 w-[5%] h-[26%] -translate-y-1/2 border-2 border-r-0 border-white z-0 pointer-events-none">
+            </div>
+
+            <div
+                class="absolute top-0 left-0 w-3 h-3 border-2 border-white rounded-br-full border-t-0 border-l-0 pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 left-0 w-3 h-3 border-2 border-white rounded-tr-full border-b-0 border-l-0 pointer-events-none">
+            </div>
+            <div
+                class="absolute top-0 right-0 w-3 h-3 border-2 border-white rounded-bl-full border-t-0 border-r-0 pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-tl-full border-b-0 border-r-0 pointer-events-none">
+            </div>
+
+            <div class="absolute inset-0 z-10 w-full h-full p-0 m-0">
+                @for (joueur of terrainJoueurs; track joueur.id) {
+                <div cdkDrag cdkDragBoundary=".pitch-boundary" (cdkDragEnded)="onDragEnded($event, joueur)"
+                    class="absolute cursor-grab active:cursor-grabbing flex flex-col items-center group -translate-x-1/2 -translate-y-1/2"
+                    [style.left.%]="joueur.x" [style.top.%]="joueur.y">
+
+                    <div
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-full border-[3px] border-slate-800 bg-[#d95e26] shadow-md flex items-center justify-center overflow-hidden">
+                        <img [src]="joueur.photoUrl || 'assets/default-player.png'"
+                            class="w-full h-full object-cover hidden">
+                    </div>
+                    <span
+                        class="absolute top-10 md:top-12 bg-black/80 text-white text-[9px] md:text-[11px] px-2 py-0.5 rounded font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                        {{ joueur.nomComplet.split(' ')[0] }}
+                    </span>
+                </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

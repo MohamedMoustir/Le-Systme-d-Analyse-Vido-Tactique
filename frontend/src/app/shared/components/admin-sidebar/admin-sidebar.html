@@ -1,0 +1,47 @@
+<aside class="w-64 h-screen bg-slate-900/80 backdrop-blur-2xl border-r border-white/10 flex flex-col shadow-2xl relative z-20">
+  
+  <div class="h-20 flex items-center px-6 border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
+        <span class="text-white font-bold text-xl">S</span>
+      </div>
+      <div>
+        <h2 class="text-white font-bold text-lg leading-tight">SAVT <span class="text-blue-400">Pro</span></h2>
+        <p class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">Admin Panel</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+    <p class="px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Menu Principal</p>
+
+    <a routerLink="/admin/dashboard" routerLinkActive="bg-blue-600/10 text-blue-400 border-blue-500/50"
+       class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl transition-all border border-transparent">
+      <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+      <span class="font-medium text-sm">Vue d'ensemble</span>
+    </a>
+
+    <a routerLink="/admin/users" routerLinkActive="bg-blue-600/10 text-blue-400 border-blue-500/50"
+       class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl transition-all border border-transparent">
+      <i class="fa-solid fa-users w-4 text-center"></i>
+      <span class="font-medium text-sm">Utilisateurs</span>
+    </a>
+
+
+    <div class="my-3 border-t border-white/5"></div>
+    <p class="px-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Finance</p>
+
+    <a routerLink="/admin/payments" routerLinkActive="bg-amber-500/10 text-amber-400 border-amber-500/40"
+       class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-amber-300 hover:bg-amber-500/5 rounded-xl transition-all border border-transparent">
+      <i class="fa-solid fa-sack-dollar w-4 text-center"></i>
+      <span class="font-medium text-sm">Paiements &amp; Plans</span>
+    </a>
+  </nav>
+
+  <div class="p-4 border-t border-white/10">
+    <button (click)="onLogout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:text-white hover:bg-red-500/20 rounded-xl transition-colors border border-transparent hover:border-red-500/30">
+      <i class="fa-solid fa-right-from-bracket w-4 text-center"></i>
+      <span class="font-medium text-sm">Déconnexion</span>
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,130 @@
+<div class="min-h-screen bg-[#070b14] text-slate-300 font-sans flex overflow-x-hidden">
+
+  <app-sidebar #sidebar></app-sidebar>
+  <main class="flex-1 lg:ml-72 relative min-h-screen flex flex-col w-full overflow-x-hidden">
+
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[500px] bg-violet-600/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+    <div class="p-4 sm:p-6 md:p-10 max-w-[1200px] mx-auto w-full relative z-10 flex-1 flex flex-col">
+
+      @if (store.isLoading()) {
+        <div class="flex justify-center items-center h-[60vh]">
+          <div class="relative flex h-12 w-12">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-violet-400"></span>
+            <span class="relative inline-flex rounded-full h-12 w-12 bg-violet-500"></span>
+          </div>
+        </div>
+      }
+
+      @if (store.error()) {
+        <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-center gap-3 mb-6 transition-all">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class="text-sm font-medium">{{ store.error() }}</span>
+        </div>
+      }
+
+      @if (store.saveSuccess()) {
+        <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-xl flex items-center gap-3 mb-6 transition-all">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span class="text-sm font-medium">Vos modifications ont été enregistrées avec succès.</span>
+        </div>
+      }
+
+      @if (!store.isLoading()) {
+        <header class="mb-10 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
+          <div class="space-y-1">
+            <h2 class="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
+              <span class="w-1.5 h-1.5 bg-violet-500 rounded-full shadow-[0_0_10px_rgba(139,92,246,0.8)]"></span>
+              Configuration
+            </h2>
+            <h3 class="text-2xl md:text-3xl font-black text-white tracking-tight flex items-center gap-3 uppercase break-words">
+              Réglages
+            </h3>
+          </div>
+
+          <div class="flex gap-2 w-full sm:w-auto">
+            <button (click)="onSave()" [disabled]="store.isSaving()" class="flex-1 sm:flex-none px-4 md:px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-[10px] md:text-xs font-bold uppercase rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 border border-white/5 disabled:opacity-50">
+              @if (store.isSaving()) {
+                <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                Enregistrement...
+              } @else {
+                Enregistrer
+              }
+            </button>
+          </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          
+          <div class="lg:col-span-1 space-y-2">
+            <a href="javascript:void(0)" class="block px-4 py-3 rounded-xl bg-white/5 text-white font-bold border border-white/10 text-sm transition-all">Mon Profil & Équipe</a>
+            <a href="javascript:void(0)" class="block px-4 py-3 rounded-xl text-slate-500 hover:bg-white/5 hover:text-slate-300 font-medium text-sm transition-all">Préférences</a>
+          </div>
+
+          <div class="lg:col-span-3 space-y-6">
+            
+            <div class="rounded-[2rem] bg-[#0b1120]/80 border border-slate-700/50 backdrop-blur-md p-6 md:p-8 shadow-xl">
+              <h2 class="text-lg font-bold text-white mb-6">Profil Personnel</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nom Complet</label>
+                  <input type="text" [(ngModel)]="formData().nomComplet" class="w-full bg-[#070b14] border border-slate-800 text-slate-200 text-sm rounded-xl focus:ring-violet-500 focus:border-violet-500 block p-3.5 outline-none transition-colors shadow-inner">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Adresse Email</label>
+                  <input type="email" [(ngModel)]="formData().email" class="w-full bg-[#070b14] border border-slate-800 text-slate-200 text-sm rounded-xl focus:ring-violet-500 focus:border-violet-500 block p-3.5 outline-none transition-colors shadow-inner">
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-[2rem] bg-[#0b1120]/80 border border-slate-700/50 backdrop-blur-md p-6 md:p-8 shadow-xl">
+              <h2 class="text-lg font-bold text-white mb-6">Informations du Club</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nom de l'équipe</label>
+                  <input type="text" [(ngModel)]="formData().nomClub" class="w-full bg-[#070b14] border border-slate-800 text-slate-200 text-sm rounded-xl focus:ring-violet-500 focus:border-violet-500 block p-3.5 outline-none transition-colors shadow-inner">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Couleur Principale</label>
+                  <div class="flex items-center gap-3">
+                    <input type="color" [(ngModel)]="formData().couleurClub" class="h-12 w-12 rounded-xl border border-slate-800 cursor-pointer bg-[#070b14] p-1 shadow-inner">
+                    <input type="text" [(ngModel)]="formData().couleurClub" class="flex-1 bg-[#070b14] border border-slate-800 text-slate-200 text-sm rounded-xl focus:ring-violet-500 focus:border-violet-500 block p-3.5 outline-none uppercase shadow-inner">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-[2rem] bg-[#0b1120]/80 border border-slate-700/50 backdrop-blur-md p-6 md:p-8 shadow-xl">
+              <h2 class="text-lg font-bold text-white mb-6">Préférences du Système</h2>
+              
+              <div class="flex items-center justify-between py-4 border-b border-slate-800/50 mb-6">
+                <div>
+                  <p class="text-sm font-bold text-slate-200">Notifications par Email</p>
+                  <p class="text-xs text-slate-500 mt-1">Recevoir un email quand une analyse est terminée.</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="formData().notificationsActives" class="sr-only peer">
+                  <div class="w-12 h-6 bg-[#070b14] border border-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-500 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-600 peer-checked:after:bg-white shadow-inner"></div>
+                </label>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Langue de l'interface</label>
+                <select [(ngModel)]="formData().langue" class="w-full bg-[#070b14] border border-slate-800 text-slate-200 text-sm rounded-xl focus:ring-violet-500 focus:border-violet-500 block p-3.5 outline-none appearance-none shadow-inner">
+                  <option value="fr">Français</option>
+                  <option value="en">English</option>
+                  <option value="ar">العربية</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      }
+    </div>
+  </main>
+</div>

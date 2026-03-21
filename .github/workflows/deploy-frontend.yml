@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'savt-fullstack/frontend/**'
+      - 'frontend/**'
 
 jobs:
   deploy:
@@ -19,10 +19,11 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script_stop: true 
           script: |
-            cd ~/savt-fullstack/frontend  
+            cd ~/Le-Systme-d-Analyse-Vido-Tactique
             
             git pull origin master 
             
+            cd frontend
             npm install
             npx ng build --configuration production
             

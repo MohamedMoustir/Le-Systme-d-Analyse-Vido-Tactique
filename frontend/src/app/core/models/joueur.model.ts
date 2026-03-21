@@ -11,3 +11,4 @@ export interface JoueurUpdateDTO {
   poste: string;
   photoUrl: string;
 }
+

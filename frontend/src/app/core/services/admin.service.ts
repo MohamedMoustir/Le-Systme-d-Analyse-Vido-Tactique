@@ -62,4 +62,6 @@ export class AdminService {
     deleteEquipe(equipeId: string): Observable<string> {
         return this.http.delete(`${this.equipesApiUrl}/${equipeId}`, { responseType: 'text' });
     }
+
+   
 }

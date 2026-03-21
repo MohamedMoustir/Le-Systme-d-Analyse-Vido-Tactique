@@ -44,8 +44,6 @@ export const EquipeStore = signalStore(
                 patchState(store, { equipe: null, error: null, isLoading: false });
                 return of(null);
               }
-
-              console.error('Erreur', err);
               patchState(store, { error: 'Erreur lors du chargement', isLoading: false });
               toastService.error('Erreur lors du chargement', 'Erreur');
               return EMPTY;

@@ -118,10 +118,8 @@ export const AuthStore = signalStore(
                         role: realUser.role,
                         plan: realUser.plan 
                     });
-                    console.log('✅ Plan vérifié depuis la DB:', realUser.plan);
                 },
                 error: () => {
-                    console.error('❌ Erreur: Token invalide ou expiré');
                     localStorage.clear();
                     patchState(store, { user: null, token: null, role: null, plan: 'FREE' });
                     router.navigate(['/login']);
@@ -131,7 +129,6 @@ export const AuthStore = signalStore(
         },
 
         logout: () => {
-            console.log('🚪 Déconnexion...');
             localStorage.clear(); 
             patchState(store, { user: null, token: null, role: null, plan: 'FREE' });
             router.navigate(['/login']);

@@ -1,0 +1,26 @@
+<div class="fixed inset-0 z-70 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" (click)="onCancel()">
+  <div class="w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl shadow-2xl" (click)="$event.stopPropagation()">
+    <div class="px-6 py-4 border-b border-white/10">
+      <h3 class="text-lg font-bold text-white">{{ title }}</h3>
+    </div>
+
+    <div class="px-6 py-5">
+      <p class="text-slate-300 text-sm leading-relaxed">{{ message }}</p>
+    </div>
+
+    <div class="px-6 pb-5 flex items-center justify-end gap-3">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="px-4 py-2 rounded-lg border border-white/10 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm transition-colors">
+        {{ cancelText }}
+      </button>
+      <button
+        type="button"
+        (click)="onConfirm()"
+        class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition-colors">
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</div>

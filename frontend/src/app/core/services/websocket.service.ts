@@ -29,18 +29,18 @@ export class WebsocketService implements OnDestroy {
       },
 
       onConnect: (frame) => {
-        console.log('✅ WebSocket Connected Successfully');
+        console.log(' WebSocket Connected Successfully');
         this.connectionStatusSubject.next(true);
       },
 
       onDisconnect: (frame) => {
-        console.log('❌ WebSocket Disconnected');
+        console.log(' WebSocket Disconnected');
         this.connectionStatusSubject.next(false);
         this.activeSubscriptions.clear(); 
       },
 
       onStompError: (frame) => {
-        console.error('🚨 Broker reported error: ' + frame.headers['message']);
+        console.error(' Broker reported error: ' + frame.headers['message']);
         console.error('Additional details: ' + frame.body);
       },
       
@@ -102,7 +102,7 @@ export class WebsocketService implements OnDestroy {
     if (subscription) {
       subscription.unsubscribe();
       this.activeSubscriptions.delete(videoId);
-      console.log(`🔕 Unsubscribed from video: ${videoId}`);
+      console.log(` Unsubscribed from video: ${videoId}`);
     }
   }
 

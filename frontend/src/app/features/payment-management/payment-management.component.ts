@@ -1,12 +1,25 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminPaymentService } from '../../core/services/admin-payment.service';
 import { PaymentStats, UserPlan, UserPlanDTO } from '../../core/models/admin.model';
+import { ConfirmationAlertComponent } from '../../shared/components/confirmation-alert/confirmation-alert.component';
+
+interface PaymentConfirmationConfig {
+  title: string;
+  message: string;
+  confirmText: string;
+  cancelText: string;
+  action: {
+    type: 'change-plan';
+    user: UserPlanDTO;
+    newPlan: UserPlan;
+  };
+}
 
 @Component({
   selector: 'app-payment-management',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ConfirmationAlertComponent],
   templateUrl: './payment-management.component.html',
   styleUrl: './payment-management.component.scss'
 })
@@ -18,6 +31,19 @@ export class PaymentManagementComponent implements OnInit {
   isLoading      = signal<boolean>(true);
   openDropdownId = signal<string | null>(null);
   loadingPlanId  = signal<string | null>(null);
+  p: number = 1;
+  itemsPerPage: number = 10;
+  confirmationConfig = signal<PaymentConfirmationConfig | null>(null);
+
+  paginatedUserPlans = computed(() => {
+    const start = (this.p - 1) * this.itemsPerPage;
+    return this.userPlans().slice(start, start + this.itemsPerPage);
+  });
+
+  totalPages = computed(() => {
+    const total = Math.ceil(this.userPlans().length / this.itemsPerPage);
+    return Math.max(1, total);
+  });
 
   ngOnInit() { this.loadData(); }
 
@@ -30,7 +56,11 @@ export class PaymentManagementComponent implements OnInit {
     });
 
     this.paymentService.getRecentTransactions().subscribe({
-      next: (data) => { this.userPlans.set(data); this.isLoading.set(false); },
+      next: (data) => {
+        this.userPlans.set(data);
+        this.p = 1;
+        this.isLoading.set(false);
+      },
       error: (err)  => { console.error('Transactions error', err); this.isLoading.set(false); }
     });
   }
@@ -40,8 +70,28 @@ export class PaymentManagementComponent implements OnInit {
   }
 
   onChangePlan(user: UserPlanDTO, newPlan: UserPlan) {
-    if (!confirm(`Changer le plan de ${user.nom} vers ${newPlan} ?`)) return;
+    this.confirmationConfig.set({
+      title: 'Confirmation de paiement',
+      message: `Changer le plan de ${user.nom} vers ${newPlan} ?`,
+      confirmText: 'Confirmer',
+      cancelText: 'Annuler',
+      action: {
+        type: 'change-plan',
+        user,
+        newPlan
+      }
+    });
+  }
 
+  onConfirmationDecision(confirmed: boolean) {
+    const config = this.confirmationConfig();
+    this.confirmationConfig.set(null);
+
+    if (!confirmed || !config) {
+      return;
+    }
+
+    const { user, newPlan } = config.action;
     this.openDropdownId.set(null);
     this.loadingPlanId.set(user.userId);
 
@@ -57,5 +107,17 @@ export class PaymentManagementComponent implements OnInit {
         this.loadingPlanId.set(null);
       }
     });
+  }
+
+  previousPage() {
+    if (this.p > 1) {
+      this.p--;
+    }
+  }
+
+  nextPage() {
+    if (this.p < this.totalPages()) {
+      this.p++;
+    }
   }
 }

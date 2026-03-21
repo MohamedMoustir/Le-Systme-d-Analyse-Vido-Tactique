@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { DashboardStats, UserResponseDTO } from '../../../core/models/admin.model';
 import { Chart, registerables } from 'chart.js'; 
+import { tapResponse } from '@ngrx/operators';
 Chart.register(...registerables); 
 
 @Component({
@@ -30,6 +31,7 @@ export class AdminDashboardComponent implements OnInit {
       }
     });
   }
+  
 
   ngOnInit() {
     this.loadData();

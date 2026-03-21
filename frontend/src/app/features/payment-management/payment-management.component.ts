@@ -31,12 +31,12 @@ export class PaymentManagementComponent implements OnInit {
   isLoading      = signal<boolean>(true);
   openDropdownId = signal<string | null>(null);
   loadingPlanId  = signal<string | null>(null);
-  p: number = 1;
-  itemsPerPage: number = 10;
+  p = signal<number>(1);
+  readonly itemsPerPage = 10;
   confirmationConfig = signal<PaymentConfirmationConfig | null>(null);
 
   paginatedUserPlans = computed(() => {
-    const start = (this.p - 1) * this.itemsPerPage;
+    const start = (this.p() - 1) * this.itemsPerPage;
     return this.userPlans().slice(start, start + this.itemsPerPage);
   });
 
@@ -58,7 +58,7 @@ export class PaymentManagementComponent implements OnInit {
     this.paymentService.getRecentTransactions().subscribe({
       next: (data) => {
         this.userPlans.set(data);
-        this.p = 1;
+        this.p.set(1);
         this.isLoading.set(false);
       },
       error: (err)  => { console.error('Transactions error', err); this.isLoading.set(false); }
@@ -110,14 +110,14 @@ export class PaymentManagementComponent implements OnInit {
   }
 
   previousPage() {
-    if (this.p > 1) {
-      this.p--;
+    if (this.p() > 1) {
+      this.p.update(current => current - 1);
     }
   }
 
   nextPage() {
-    if (this.p < this.totalPages()) {
-      this.p++;
+    if (this.p() < this.totalPages()) {
+      this.p.update(current => current + 1);
     }
   }
 }

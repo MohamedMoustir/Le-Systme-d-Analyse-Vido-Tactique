@@ -31,8 +31,8 @@ export class AdminUsersComponent implements OnInit {
   users = signal<UserResponseDTO[]>([]);
   isLoading = signal<boolean>(true);
   isCreating = signal<boolean>(false);
-  p: number = 1;
-  itemsPerPage: number = 10;
+  p = signal<number>(1);
+  readonly itemsPerPage = 10;
   confirmationConfig = signal<AdminUsersConfirmationConfig | null>(null);
   
   searchQuery = signal<string>('');
@@ -46,7 +46,7 @@ export class AdminUsersComponent implements OnInit {
   });
 
   paginatedUsers = computed(() => {
-    const start = (this.p - 1) * this.itemsPerPage;
+    const start = (this.p() - 1) * this.itemsPerPage;
     return this.filteredUsers().slice(start, start + this.itemsPerPage);
   });
 
@@ -64,7 +64,7 @@ export class AdminUsersComponent implements OnInit {
     this.adminService.getAllUsers().subscribe({
       next: (data) => {
         this.users.set(data);
-        this.p = 1;
+        this.p.set(1);
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -150,27 +150,27 @@ export class AdminUsersComponent implements OnInit {
 
   onSearchChange(query: string) {
     this.searchQuery.set(query);
-    this.p = 1;
+    this.p.set(1);
   }
 
   previousPage() {
-    if (this.p > 1) {
-      this.p--;
+    if (this.p() > 1) {
+      this.p.update(current => current - 1);
     }
   }
 
   nextPage() {
-    if (this.p < this.totalPages()) {
-      this.p++;
+    if (this.p() < this.totalPages()) {
+      this.p.update(current => current + 1);
     }
   }
 
   private ensurePageBounds() {
-    if (this.p > this.totalPages()) {
-      this.p = this.totalPages();
+    if (this.p() > this.totalPages()) {
+      this.p.set(this.totalPages());
     }
-    if (this.p < 1) {
-      this.p = 1;
+    if (this.p() < 1) {
+      this.p.set(1);
     }
   }
 }

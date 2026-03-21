@@ -14,7 +14,6 @@ export interface UserResponseDTO {
 }
 
 
-
 export interface VideoAdminDTO {
   id: string;
   titre: string;

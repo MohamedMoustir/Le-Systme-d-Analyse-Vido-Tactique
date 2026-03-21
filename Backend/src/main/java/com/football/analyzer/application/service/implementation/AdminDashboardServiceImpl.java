@@ -1,14 +1,20 @@
 package com.football.analyzer.application.service.implementation;
 
 import com.football.analyzer.application.service.AdminDashboardService;
+import com.football.analyzer.domain.entity.User;
+import com.football.analyzer.domain.entity.VideoMetadata;
 import com.football.analyzer.domain.enums.Role;
+import com.football.analyzer.domain.enums.StatutAnalyse;
 import com.football.analyzer.domain.repository.UserRepository;
 import com.football.analyzer.domain.repository.VideoRepository;
 import com.football.analyzer.domain.repository.EquipeRepository;
 import com.football.analyzer.presentation.dto.Response.DashboardStatsResponse;
+import com.football.analyzer.presentation.dto.Response.VideoAdminDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,4 +44,6 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
                 .totalEquipes(totalEquipes)
                 .build();
     }
+
+
 }

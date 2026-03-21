@@ -17,4 +17,5 @@ public interface VideoService {
     List<VideoMetadata> findByUploaderId(String userId);
 
     VideoMetadata findById(String videoId);
+
 }

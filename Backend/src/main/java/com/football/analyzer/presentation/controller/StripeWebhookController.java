@@ -40,6 +40,7 @@ public class StripeWebhookController {
         Event event;
 
         try {
+//           Sécurité les sintuer
             event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
         } catch (SignatureVerificationException e) {
             log.error("Signature webhook invalide: {}", e.getMessage());
@@ -93,10 +94,9 @@ public class StripeWebhookController {
         return ResponseEntity.ok("Webhook recu");
     }
 
-    /**
-     * Traiter l'événement checkout.session.completed
-     */
-    private void handleCheckoutSessionCompleted(Session session) {
+  //      Traiter l'événement checkout.session.completed
+
+  private void handleCheckoutSessionCompleted(Session session) {
         log.info("Paiement reussi pour la session: {}", session.getId());
 
         Map<String, String> metadata = session.getMetadata();

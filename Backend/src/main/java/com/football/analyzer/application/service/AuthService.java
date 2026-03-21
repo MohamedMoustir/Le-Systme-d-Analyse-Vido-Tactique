@@ -6,4 +6,5 @@ import com.football.analyzer.presentation.dto.Response.LoginResponse;
 public interface AuthService {
      LoginResponse register(RegisterRequest registerRequest);
      LoginResponse login(String email, String password);
+  LoginResponse refreshToken(String refreshToken);
 }

@@ -4,10 +4,14 @@ package com.football.analyzer.application.mapper;
 import com.football.analyzer.domain.entity.Equipe;
 import com.football.analyzer.domain.entity.MatchStatistics;
 import com.football.analyzer.domain.entity.VideoMetadata;
+import com.football.analyzer.presentation.dto.Response.VideoAdminDTO;
 import com.football.analyzer.presentation.dto.Response.VideoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = {UserMapper.class, EventMapper.class, CommentMapper.class})
 public interface VideoMapper {
     @Mapping(source = "titre", target = "titre")
@@ -27,4 +31,6 @@ public interface VideoMapper {
     @Mapping(source = "distanceTotaleHome", target = "distanceHome")
     @Mapping(source = "distanceTotaleAway", target = "distanceAway")
     VideoResponse.MatchStatsDTO toStatsDTO(MatchStatistics stats);
+
+    List<VideoAdminDTO> toResponseList(List<VideoMetadata> metadata);
 }

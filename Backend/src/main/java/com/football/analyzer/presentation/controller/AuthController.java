@@ -4,6 +4,7 @@ import com.football.analyzer.application.service.AuthService;
 import com.football.analyzer.application.service.UserService;
 import com.football.analyzer.domain.entity.User;
 import com.football.analyzer.presentation.dto.Request.LoginRequest;
+import com.football.analyzer.presentation.dto.Request.RefreshTokenRequest;
 import com.football.analyzer.presentation.dto.Request.RegisterRequest;
 import com.football.analyzer.presentation.dto.Response.LoginResponse;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 import java.util.Optional;
 import java.security.Principal;
 
@@ -34,7 +36,7 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest){
         LoginResponse response = authService.login(loginRequest.getEmail() ,loginRequest.getPassword());
         return ResponseEntity.ok(response);
-        
+
     }
 
     @GetMapping("/me")
@@ -47,6 +49,10 @@ public class AuthController {
 
         return ResponseEntity.ok(userProfile);
     }
-
+  @PostMapping("/refresh")
+  public ResponseEntity<LoginResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+    LoginResponse response = authService.refreshToken(request.getRefreshToken());
+    return ResponseEntity.ok(response);
+  }
 
 }

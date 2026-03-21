@@ -4,6 +4,7 @@ import com.football.analyzer.application.mapper.UserMapper;
 import com.football.analyzer.application.service.UserService;
 import com.football.analyzer.domain.entity.User;
 import com.football.analyzer.domain.enums.Role;
+import com.football.analyzer.domain.enums.SubscriptionPlan;
 import com.football.analyzer.domain.exception.ResourceNotFoundException;
 import com.football.analyzer.domain.repository.UserRepository;
 import com.football.analyzer.presentation.dto.Request.UserUpdateDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,4 +74,11 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+
+//    public Set<String> getJouerAll(){
+//       return userRepository.findAll().stream()
+//         .filter(f->f.getRole().equals(Role.COACH))
+//         .flatMap(p->p.ge)
+//    }
 }

@@ -2,6 +2,7 @@ package com.football.analyzer.domain.repository;
 
 
 import com.football.analyzer.domain.entity.VideoMetadata;
+import com.football.analyzer.presentation.dto.Response.VideoAdminDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +15,5 @@ public interface VideoRepository {
     List<VideoMetadata> findByUploaderId(String userId);
     long count();
     long countByUploaderId(String uploaderId);
+
 }

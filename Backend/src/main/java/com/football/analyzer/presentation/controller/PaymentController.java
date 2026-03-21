@@ -26,7 +26,7 @@ public class PaymentController {
 
         String userId = userUtils.getCurrentUser().getId();
 
-        log.info("📝 Création d'une session checkout pour l'utilisateur: {} (plan: {})", userId, request.getPlanName());
+        log.info("Création d'une session checkout pour l'utilisateur: {} (plan: {})", userId, request.getPlanName());
 
         String checkoutUrl = stripeService.createCheckoutSession(
                 userId,

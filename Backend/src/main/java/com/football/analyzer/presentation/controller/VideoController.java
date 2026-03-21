@@ -35,7 +35,7 @@ public class VideoController {
     private static final String BYTE_RANGE_PREFIX = "bytes";
 
     private final VideoService videoService;
-    private final FootballAnalysisService footballAnalysisService; // The Runner
+    private final FootballAnalysisService footballAnalysisService;
     private final UserUtils userUtils;
 
     @Value("${upload.path:uploads}")
@@ -105,7 +105,6 @@ public class VideoController {
                     .body(resource);
 
         } catch (Exception e) {
-            System.out.println("❌ [DEBUG] ERROR IN PLAY VIDEO:");
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }

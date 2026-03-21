@@ -25,9 +25,11 @@ public class StreamController {
 
     private static final Logger logger = LoggerFactory.getLogger(StreamController.class);
 
+//    pou les message json
     private final ObjectMapper objectMapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
+//    pour WebSockets
     private final SimpMessagingTemplate messagingTemplate;
     private final VideoService videoService;
     private final VideoRepository videoRepository;
@@ -58,7 +60,7 @@ public class StreamController {
         currentVideoId.set(videoId);
 
         stopStreamInternal(false);
-
+//      Préparation du Stream
         response.setContentType("multipart/x-mixed-replace; boundary=frame");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
@@ -82,7 +84,7 @@ public class StreamController {
             String outputAbsolutePath = absolutePath.replace(".mp4", "_analyzed.mp4");
 
             logger.info("Starting Unified Python Stream for: {}", absolutePath);
-
+//          Le lancement de Python
             ProcessBuilder pb = new ProcessBuilder(
                     pythonExecutable, "-u", pythonScriptPath,
                     "-i", absolutePath, "-o", outputAbsolutePath,
@@ -94,7 +96,7 @@ public class StreamController {
             pb.environment().put("PYTHONIOENCODING", "utf-8");
 
             streamProcess = pb.start();
-
+//          Le deuxième travailleur
             new Thread(() -> {
                 try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(streamProcess.getErrorStream(), "UTF-8"))) {
                     String line;
@@ -111,12 +113,12 @@ public class StreamController {
                                     if ("frame_analysis".equals(msgType)) {
                                         FrameAnalysisDTO dto = objectMapper.treeToValue(node, FrameAnalysisDTO.class);
                                         if (dto.getFrameNum() != null && dto.getFrameNum() % 30 == 0) {
-                                            logger.info("💾 Saved Frame {} info for Video {}", dto.getFrameNum(), videoId);
+                                            logger.info(" Saved Frame {} info for Video {}", dto.getFrameNum(), videoId);
                                         }
                                         videoService.processAnalysisMessage(videoId, dto);
                                     }
                                 } catch (Exception e) {
-                                    logger.error("❌ Error parsing JSON", e);
+                                    logger.error(" Error parsing JSON", e);
                                 }
                             }
                         }
@@ -215,10 +217,10 @@ public class StreamController {
                 }
 
                 videoRepository.save(video);
-                logger.info("✅ [SUCCESS] Video {} status updated to TERMINE and path changed to _analyzed.mp4", videoId);
+                logger.info(" [SUCCESS] Video {} status updated to TERMINE and path changed to _analyzed.mp4", videoId);
             }
         } catch (Exception e) {
-            logger.error("❌ [ERROR] Failed to update video status in DB", e);
+            logger.error(" [ERROR] Failed to update video status in DB", e);
         }
     }
 }

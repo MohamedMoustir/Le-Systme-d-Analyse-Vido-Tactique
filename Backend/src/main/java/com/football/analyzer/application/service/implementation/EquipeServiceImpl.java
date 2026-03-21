@@ -17,10 +17,8 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,4 +129,12 @@ public class EquipeServiceImpl implements EquipeService {
 
         return equipeMapper.toDto(equipe);
     }
+
+//    public List<String> getAll() {
+//      return equipeRepository.findAll().stream()
+//        .flatMap(p -> p.getJoueurs().stream())
+//        .filter(p -> p.isBlesse() == false).
+//        map(Joueur::getNomComplet)
+//        .collect(Collectors.toList());
+//    }
 }

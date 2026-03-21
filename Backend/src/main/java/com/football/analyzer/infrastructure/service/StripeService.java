@@ -60,7 +60,7 @@ public class StripeService {
 
             log.info(" Stripe Checkout Session créée: {} pour userId: {}", session.getId(), userId);
 
-            return session.getUrl(); // URL de redirection vers la page de paiement Stripe
+            return session.getUrl(); // URL de redirection
 
         } catch (StripeException e) {
             log.error(" Erreur lors de la création de la session Stripe: {}", e.getMessage(), e);
@@ -68,9 +68,8 @@ public class StripeService {
         }
     }
 
-    /**
-     * Met à jour le plan d'abonnement de l'utilisateur
-     */
+
+
     @Transactional
     public void upgradeToPremium(String userId) {
         User user = userRepository.findById(userId)
@@ -82,9 +81,7 @@ public class StripeService {
         log.info("Plan updated: utilisateur {} passe au plan {}", savedUser.getId(), savedUser.getPlan());
     }
 
-    /**
-     * Met à jour le plan d'abonnement de l'utilisateur par email
-     */
+
     @Transactional
     public void upgradeToPremiumByEmail(String email) {
         User user = userRepository.findByEmail(email)

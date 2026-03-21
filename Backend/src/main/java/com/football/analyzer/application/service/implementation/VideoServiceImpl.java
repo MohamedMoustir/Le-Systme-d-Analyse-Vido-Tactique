@@ -1,11 +1,7 @@
 package com.football.analyzer.application.service.implementation;
 
 import com.football.analyzer.application.service.VideoService;
-import com.football.analyzer.domain.entity.EvenementMatch;
-import com.football.analyzer.domain.entity.MatchStatistics;
-import com.football.analyzer.domain.entity.PositionData;
-import com.football.analyzer.domain.entity.User;
-import com.football.analyzer.domain.entity.VideoMetadata;
+import com.football.analyzer.domain.entity.*;
 import com.football.analyzer.domain.enums.StatutAnalyse;
 import com.football.analyzer.domain.enums.SubscriptionPlan;
 import com.football.analyzer.domain.exception.PaymentRequiredException;
@@ -31,9 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -146,8 +140,6 @@ public class VideoServiceImpl implements VideoService {
         return metadataRepository.findById(videoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Video not found with ID: " + videoId));
     }
-
-
     private void handleFrameAnalysis(String videoId, FrameAnalysisDTO dto) {
         if ("GOAL".equalsIgnoreCase(dto.getEvent())) {
             int currentFrame = dto.getFrameNum();
@@ -280,4 +272,9 @@ public class VideoServiceImpl implements VideoService {
 
          //updatePlayerInfo(videoId, dto);
     }
+//     private Set<String> getTopCompletedVideo(){
+//      return metadataRepository.findAll().stream()
+//        .map(VideoMetadata::getTitre)
+//        .collect(Collectors.toSet());
+//     }
 }

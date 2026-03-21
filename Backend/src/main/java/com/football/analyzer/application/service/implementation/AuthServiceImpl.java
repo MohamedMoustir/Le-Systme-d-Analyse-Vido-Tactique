@@ -62,4 +62,33 @@ public class AuthServiceImpl implements AuthService {
 
         return LoginResponse.builder().accessToken(accessToken).refreshToken(refreshToken).tokenType(BEARER_TOKEN_TYPE).email(user.getEmail()).role(user.getRole().toString()).build();
     }
+
+  @Override
+  public LoginResponse refreshToken(String refreshToken) {
+
+    String userEmail = jwtService.extractUsername(refreshToken);
+
+    if (userEmail != null) {
+      User user = userRepository.findByEmail(userEmail)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+      if (jwtService.isTokenValid(refreshToken)) {
+
+        String role = user.getRole().toString();
+        String newAccessToken = this.jwtService.generateToken(userEmail, role);
+        String newRefreshToken = this.jwtService.generateRefreshToken(userEmail);
+
+        refreshTokenService.storeRefreshtoken(newRefreshToken);
+
+        return LoginResponse.builder()
+          .accessToken(newAccessToken)
+          .refreshToken(newRefreshToken)
+          .tokenType(BEARER_TOKEN_TYPE)
+          .email(user.getEmail())
+          .role(role)
+          .build();
+      }
+    }
+    throw new RuntimeException("Refresh Token invalide ou expiré");
+  }
 }

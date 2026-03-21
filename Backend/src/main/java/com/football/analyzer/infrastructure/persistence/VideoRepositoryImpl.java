@@ -1,51 +1,57 @@
 package com.football.analyzer.infrastructure.persistence;
 
 
+import com.football.analyzer.application.mapper.VideoMapper;
 import com.football.analyzer.domain.entity.VideoMetadata;
 import com.football.analyzer.domain.repository.VideoRepository;
+import com.football.analyzer.presentation.dto.Response.VideoAdminDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
 public class VideoRepositoryImpl implements VideoRepository {
 
-    private final SpringDataVideoRepository springDataVideoRepository;
-    @Override
-    public VideoMetadata save(VideoMetadata video) {
-        return springDataVideoRepository.save(video);
-    }
+  private final SpringDataVideoRepository springDataVideoRepository;
+  private final VideoMapper videoMapper;
 
-    @Override
-    public Optional<VideoMetadata> findById(String id) {
-        return springDataVideoRepository.findById(id);
-    }
+  @Override
+  public VideoMetadata save(VideoMetadata video) {
+    return springDataVideoRepository.save(video);
+  }
 
-    @Override
-    public List<VideoMetadata> findAll() {
-        return springDataVideoRepository.findAll();
-    }
+  @Override
+  public Optional<VideoMetadata> findById(String id) {
+    return springDataVideoRepository.findById(id);
+  }
 
-    @Override
-    public void deleteById(String id) {
-        springDataVideoRepository.deleteById(id);
-    }
+  @Override
+  public List<VideoMetadata> findAll() {
+    return springDataVideoRepository.findAll();
+  }
 
-    @Override
-    public List<VideoMetadata> findByUploaderId(String userId) {
-        return springDataVideoRepository.findByUploaderId(userId);
-    }
+  @Override
+  public void deleteById(String id) {
+    springDataVideoRepository.deleteById(id);
+  }
 
-    @Override
-    public long count() {
-        return springDataVideoRepository.count();
-    }
+  @Override
+  public List<VideoMetadata> findByUploaderId(String userId) {
+    return springDataVideoRepository.findByUploaderId(userId);
+  }
 
-    @Override
-    public long countByUploaderId(String uploaderId) {
-        return springDataVideoRepository.countByUploaderId(uploaderId);
-    }
+  @Override
+  public long count() {
+    return springDataVideoRepository.count();
+  }
+
+  @Override
+  public long countByUploaderId(String uploaderId) {
+    return springDataVideoRepository.countByUploaderId(uploaderId);
+  }
+
 }

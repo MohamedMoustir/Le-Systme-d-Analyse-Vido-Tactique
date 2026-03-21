@@ -19,7 +19,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script_stop: true 
           script: |
-            cd ~/Le-Systme-d-Analyse-Vido-Tactique
+            cd ~/savt-fullstack/frontend  
             
             git pull origin master 
             

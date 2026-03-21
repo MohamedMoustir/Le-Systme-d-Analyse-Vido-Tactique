@@ -19,7 +19,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script_stop: true 
           script: |
-            cd ~/savt-fullstack/frontend  
+            cd ~/frontend-app
             
             git pull origin master 
             

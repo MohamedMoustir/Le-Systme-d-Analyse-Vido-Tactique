@@ -22,6 +22,8 @@ export class TeamComponent implements OnInit {
   isModalOpen = signal(false);
   editingJoueurId = signal<number | null>(null);
   photoPreview = signal<string | null>(null);
+  showDeleteCard: boolean = false;
+  joueurToDeleteId: number | null = null;
 
   selectedFile: File | null = null;
 
@@ -67,10 +69,22 @@ export class TeamComponent implements OnInit {
     this.isModalOpen.set(false);
   }
 
+
   onDeleteJoueur(id: number) {
-    if (confirm('Are you sure?')) {
-      this.store.deleteJoueur(id.toString());
+    this.joueurToDeleteId = id;
+    this.showDeleteCard = true;
+  }
+
+  confirmerSuppression() {
+    if (this.joueurToDeleteId !== null) {
+      this.store.deleteJoueur(this.joueurToDeleteId.toString());
+      this.fermerCard();
     }
+  }
+
+  fermerCard() {
+    this.showDeleteCard = false;
+    this.joueurToDeleteId = null;
   }
 
   onSubmitJoueur() {

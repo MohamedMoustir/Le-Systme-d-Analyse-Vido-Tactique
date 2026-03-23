@@ -109,6 +109,28 @@
       <app-shared-joueur-form [formGroup]="joueurForm" [photoPreview]="photoPreview()" [isEditMode]="!!editingJoueurId()" (close)="closeModal()" (submitForm)="onSubmitJoueur()" (uploadPhoto)="photoInput.click()"></app-shared-joueur-form>
     }
 
+
     <input type="file" #photoInput hidden accept="image/*" (change)="onPhotoSelected($event)">
+
+    @if (showDeleteCard) {
+  <div class="overlay-modal">
+    
+    <div class="card-confirmation">
+      <h4>⚠️ Confirmation</h4>
+      <p>Êtes-vous sûr de vouloir supprimer ce joueur ? Cette action est définitive.</p>
+      
+      <div class="card-actions">
+        <button class="btn-annuler" (click)="fermerCard()">
+          Annuler
+        </button>
+        
+        <button class="btn-supprimer" (click)="confirmerSuppression()">
+          Oui, supprimer
+        </button>
+      </div>
+    </div>
+
+  </div>
+}
   </main>
 </div>

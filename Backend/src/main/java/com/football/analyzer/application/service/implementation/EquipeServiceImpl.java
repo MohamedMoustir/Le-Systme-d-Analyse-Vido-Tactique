@@ -130,11 +130,5 @@ public class EquipeServiceImpl implements EquipeService {
         return equipeMapper.toDto(equipe);
     }
 
-//    public List<String> getAll() {
-//      return equipeRepository.findAll().stream()
-//        .flatMap(p -> p.getJoueurs().stream())
-//        .filter(p -> p.isBlesse() == false).
-//        map(Joueur::getNomComplet)
-//        .collect(Collectors.toList());
-//    }
+
 }

@@ -1,8 +1,11 @@
 package com.football.analyzer.application.service.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.football.analyzer.domain.entity.EvenementMatch;
+import com.football.analyzer.domain.entity.PositionData;
 import com.football.analyzer.domain.entity.VideoMetadata;
 import com.football.analyzer.domain.enums.StatutAnalyse;
+import com.football.analyzer.domain.repository.EvenementMatchRepository;
 import com.football.analyzer.domain.repository.PositionRepository;
 import com.football.analyzer.domain.repository.VideoRepository;
 import com.football.analyzer.presentation.dto.Response.FrameAnalysisDTO;
@@ -16,9 +19,12 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,7 +34,7 @@ public class FootballAnalysisService {
     private final VideoRepository videoRepository;
     private final PositionRepository positionRepository;
     private final SimpMessagingTemplate messagingTemplate;
-
+  private final EvenementMatchRepository evenementMatchRepository;
     private final VideoServiceImpl videoService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -139,4 +145,19 @@ public class FootballAnalysisService {
         video.setStatut(statut);
         videoRepository.save(video);
     }
+
+//    public Map<Long,Long> getAllJouer() {
+//      return  positionRepository.findAll().stream()
+//        .filter(p -> p.getVideoId().equals("1aszefpkzng"))
+//        .collect(Collectors.groupingBy(PositionData::getJoueurId, Collectors.counting()))
+//        .entrySet().stream()
+//        .sorted(Map.Entry.<Long, Long>comparingByValue())
+//        .collect(Collectors.toMap(
+//          Map.Entry::getKey,
+//          Map.Entry::getValue,
+//          (e1, e2) -> e1,
+//          LinkedHashMap::new
+//        ));
+//    }
+
 }

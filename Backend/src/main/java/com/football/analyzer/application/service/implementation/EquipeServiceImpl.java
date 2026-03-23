@@ -129,6 +129,4 @@ public class EquipeServiceImpl implements EquipeService {
 
         return equipeMapper.toDto(equipe);
     }
-
-
 }

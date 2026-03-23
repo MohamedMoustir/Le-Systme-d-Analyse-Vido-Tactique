@@ -14,7 +14,7 @@ export class EquipeService {
 
     createTeam(nomEquipe: string, couleurHex?: string): Observable<Equipe> {
         let params = new HttpParams().set('nomEquipe', nomEquipe);
-        
+
         if (couleurHex) {
             params = params.set('couleurHex', couleurHex);
         }
@@ -35,4 +35,6 @@ export class EquipeService {
     addJoueur(dto: any): Observable<Joueur> {
         return this.http.post<Joueur>(`${this.apiUrl}/my-team/joueur`, dto);
     }
+
+  
 }

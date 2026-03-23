@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs'; // 🔴 1. جبنا Subscription باش نتحكمو فـ WebSocket
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'; // 🔴 1. جبنا Subscription باش نتحكمو فـ WebSocket
 import { ApiService } from '../../../core/services/api.service';
 import { VideoResponse, FrameAnalysis, AnalysisMessage } from '../../../core/models/analysis.model';
 import { UploadZoneComponent } from '../components/upload-zone/upload-zone.component';
@@ -25,12 +25,12 @@ import { Equipe } from '../../../core/models/equipe.model';
   selector: 'app-video-dashboard',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    RadarTactiqueComponent, 
-    UploadZoneComponent, 
-    TimelineComponent, 
-    StatsPanelComponent, 
+    CommonModule,
+    FormsModule,
+    RadarTactiqueComponent,
+    UploadZoneComponent,
+    TimelineComponent,
+    StatsPanelComponent,
     VideoPlayerComponent,
     VideoControlsComponent,
     RouterLink,
@@ -44,10 +44,11 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
   private wsService = inject(WebsocketService);
   private equipeService = inject(EquipeService);
   private toastService = inject(ToastService);
-  private wsSubscription?: Subscription; 
+  private wsSubscription?: Subscription;
   
+
   livePlayers = signal<any[]>([]);
-  liveFrameData = signal<any>(null); 
+  liveFrameData = signal<any>(null);
 
   showLimitModal = signal(false);
   showTeamCreationModal = signal(false);
@@ -65,7 +66,7 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
 
     effect(() => {
       const videoId = this.store.currentVideoId();
-      const isAnalyzing = this.store.isAnalyzing(); 
+      const isAnalyzing = this.store.isAnalyzing();
 
       if (videoId && isAnalyzing) {
         this.connectToAnalysisStream(videoId);
@@ -101,8 +102,8 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
         const mapped = data.players
           .filter((p: any) => p.position_field !== null)
           .map((p: any) => {
-            const MAX_X_FROM_PYTHON = 25; 
-            const MAX_Y_FROM_PYTHON = 40; 
+            const MAX_X_FROM_PYTHON = 25;
+            const MAX_Y_FROM_PYTHON = 40;
 
             let calcX = (p.position_field[0] / MAX_X_FROM_PYTHON) * 100;
             let calcY = (p.position_field[1] / MAX_Y_FROM_PYTHON) * 100;
@@ -117,7 +118,7 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
               FieldY: calcY,
               hasBall: p.has_ball || false,
               speed: p.speed_kmh || 0,
-              number: p.jersey_number || p.id 
+              number: p.jersey_number || p.id
             };
           });
 
@@ -126,18 +127,15 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  // liveStreamSafeUrl = computed(() => {
-  //   const rawUrl = this.store.streamRawUrl();
-  //   return rawUrl ? this.sanitizer.bypassSecurityTrustUrl(rawUrl) : null;
-  // });
-  liveStreamSafeUrl = computed(() => {
-  const rawUrl = this.store.originalVideoUrl(); 
-  if (!rawUrl) return null;
-
-  const cleanUrl = this.getFullVideoUrl(rawUrl);
   
-  return cleanUrl ? this.sanitizer.bypassSecurityTrustUrl(cleanUrl) : null;
-});
+  liveStreamSafeUrl = computed(() => {
+    const rawUrl = this.store.originalVideoUrl();
+    if (!rawUrl) return null;
+
+    const cleanUrl = this.getFullVideoUrl(rawUrl);
+
+    return cleanUrl ? this.sanitizer.bypassSecurityTrustUrl(cleanUrl) : null;
+  });
 
   onVideoSelected(file: File) {
     this.showLimitModal.set(false);
@@ -207,20 +205,24 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-private getFullVideoUrl(path: string | null | undefined): string | null {
-  if (!path) return null;
+  private getFullVideoUrl(path: string | null | undefined): string | null {
+    if (!path) return null;
 
-  const fileName = path.split('/').pop(); 
-  if (!fileName) return null;
+    const fileName = path.split('/').pop();
+    if (!fileName) return null;
 
-  const cleanApiPath = `/api/uploads/${fileName}`;
+    const cleanApiPath = `/api/uploads/${fileName}`;
 
-  if (window.location.hostname === 'localhost') {
-    return `http://localhost:8080${cleanApiPath}`;
+    if (window.location.hostname === 'localhost') {
+      return `http://localhost:8080${cleanApiPath}`;
+    }
+
+    return cleanApiPath;
   }
 
-  return cleanApiPath; 
-}
 
-  
+  MatchService(){
+    
+  }
+
 }

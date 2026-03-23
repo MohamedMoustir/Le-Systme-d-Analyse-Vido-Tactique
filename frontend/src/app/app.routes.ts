@@ -66,6 +66,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [adminGuard],
+   
     loadComponent: () => import('./features/admin-dashboard/admin-layout/admin-layout').then(m => m.AdminLayoutComponent),
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

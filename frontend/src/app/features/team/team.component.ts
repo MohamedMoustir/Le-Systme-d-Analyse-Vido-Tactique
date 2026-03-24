@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { JoueurCardComponent } from '../../shared/components/joueur-card/joueur-card.component';
@@ -7,7 +7,6 @@ import { EquipeService } from '../../core/services/equipe.service';
 import { JoueurService } from '../../core/services/joueur.service';
 import { EquipeStore } from '../../core/store/equipe.store';
 import { SidebarComponent } from "../../core/layout/sidebar/app-sidebar";
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -19,6 +18,10 @@ export class TeamComponent implements OnInit {
   private joueurService = inject(JoueurService);
   private equipeService = inject(EquipeService);
   public store = inject(EquipeStore);
+
+  searchTerm = signal<string>('');
+  currentPage = signal<number>(1);
+  readonly itemsPerPage = 10;
 
   isModalOpen = signal(false);
   editingJoueurId = signal<number | null>(null);
@@ -35,14 +38,92 @@ export class TeamComponent implements OnInit {
     photoUrl: ['']
   });
 
-  chekCanExit() {
+  chekCanExit(){
     return this.joueurForm.dirty
   }
+  filteredJoueurs = computed(() => {
+    const search = this.searchTerm().toLowerCase().trim();
+    const allJoueurs = this.store.joueurs();
+    
+    if (!search) {
+      return allJoueurs;
+    }
+    
+    return allJoueurs.filter(joueur =>
+      joueur.nomComplet.toLowerCase().includes(search)
+    );
+  });
+
+
+  totalPages = computed(() => {
+    const filtered = this.filteredJoueurs();
+    return Math.ceil(filtered.length / this.itemsPerPage) || 1;
+  });
+
+  
+  paginatedJoueurs = computed(() => {
+    const filtered = this.filteredJoueurs();
+    const startIndex = (this.currentPage() - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    
+    return filtered.slice(startIndex, endIndex);
+  });
+
+ 
+  filteredCount = computed(() => this.filteredJoueurs().length);
+
+
 
   constructor() {
     effect(() => {
       console.log('Current players in store:', this.store.joueurs());
+      this.resetPagination();
     });
+  }
+
+  
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update(page => page + 1);
+    }
+  }
+
+  
+  previousPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update(page => page - 1);
+    }
+  }
+
+ 
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
+    }
+  }
+
+  resetPagination() {
+    this.currentPage.set(1);
+  }
+
+  
+  onSearchChange(searchValue: string) {
+    this.searchTerm.set(searchValue);
+    this.resetPagination();
+  }
+
+ 
+  clearSearch() {
+    this.searchTerm.set('');
+    this.resetPagination();
+  }
+
+  /**
+   * Get array of page numbers for pagination buttons (e.g., [1, 2, 3, 4, 5])
+   */
+  getPageNumbers(): number[] {
+    const pageCount = this.totalPages();
+    return Array.from({ length: pageCount }, (_, index) => index + 1);
   }
 
   ngOnInit() {

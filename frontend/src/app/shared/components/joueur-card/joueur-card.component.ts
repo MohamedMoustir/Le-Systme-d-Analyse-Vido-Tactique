@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerFlagPipe } from '../../pipes/player-flag-pipe';
+import { IsCoach } from "../../directives/is-coach";
 
 @Component({
   selector: 'app-shared-joueur-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IsCoach],
   templateUrl: './joueur-card.component.html'
 })
 export class JoueurCardComponent {

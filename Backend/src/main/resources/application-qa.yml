@@ -63,7 +63,7 @@ logging:
     console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 jwt:
-  secret-key: ${JWT_SECRET_KEY}
+  secret-key: ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
   access-token:
     expiration: 7200000
   refresh-token:
@@ -71,11 +71,11 @@ jwt:
 
 stripe:
   api:
-    key: ${STRIPE_API_KEY}
+    key: ${STRIPE_API_KEY:sk_test_51RWDUjCi3z7Q48KgQ3u9zwCm4v41mBQy9WDq8isWyKGbsAEFKIIgVBUtnUpFoqPRE4EYLnAcLTexwjIEZnRMWutf00iZjG8dsv}
   webhook:
-    secret: ${STRIPE_WEBHOOK_SECRET}
+    secret: ${STRIPE_WEBHOOK_SECRET:whsec_wBGAE70rX3DZvTPAxE00fOt5wn3SuCRk}
   price:
-    premium: ${STRIPE_PREMIUM_PRICE_ID}
+    premium: ${STRIPE_PREMIUM_PRICE_ID:price_1T95CdCi3z7Q48KgbAzflaaD}
 management:
   endpoints:
     web:

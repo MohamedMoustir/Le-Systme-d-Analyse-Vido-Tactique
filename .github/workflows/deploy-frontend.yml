@@ -1,36 +1,36 @@
-name: Deploy Frontend
+# name: Deploy Frontend
 
-on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'frontend/**'
+# on:
+#   push:
+#     branches:
+#       - master
+#     paths:
+#       - 'frontend/**'
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy Angular to VPS
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: root
-          password: ${{ secrets.SERVER_PASSWORD }}
-          script_stop: true 
-          script: |
-            cd ~/frontend-app
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Deploy Angular to VPS
+#         uses: appleboy/ssh-action@v1.0.0
+#         with:
+#           host: ${{ secrets.SERVER_IP }}
+#           username: root
+#           password: ${{ secrets.SERVER_PASSWORD }}
+#           script_stop: true 
+#           script: |
+#             cd ~/frontend-app
             
-            git fetch origin master
+#             git fetch origin master
             
-            git reset --hard origin/master 
+#             git reset --hard origin/master 
             
-            cd frontend
-            npm install
-            npx ng build --configuration production
+#             cd frontend
+#             npm install
+#             npx ng build --configuration production
             
-            rm -rf /var/www/html/*
+#             rm -rf /var/www/html/*
             
-            cp -r dist/*/browser/* /var/www/html/ 2>/dev/null || cp -r dist/*/ /var/www/html/
+#             cp -r dist/*/browser/* /var/www/html/ 2>/dev/null || cp -r dist/*/ /var/www/html/
             
-            systemctl restart nginx
+#             systemctl restart nginx

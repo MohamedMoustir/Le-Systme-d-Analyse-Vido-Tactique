@@ -13,10 +13,10 @@
 </p>
 
 </div>
----
-![img_1.png](img_1.png)
-![img_2.png](img_2.png)
-![img_3.png](img_3.png)
+
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image.png)
 
 ## 📚 Table des matières
 

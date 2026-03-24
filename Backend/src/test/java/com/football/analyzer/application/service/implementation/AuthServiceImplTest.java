@@ -58,7 +58,7 @@ class AuthServiceImplTest {
 
     @Test
     void register_shouldReturnLoginResponse_whenRequestIsValid() {
-        // Given
+
         RegisterRequest request = RegisterRequest.builder()
                 .nom("Safiy")
                 .email("safiy@test.com")
@@ -71,10 +71,10 @@ class AuthServiceImplTest {
         when(jwtService.generateToken(request.getEmail(), "COACH")).thenReturn("access-token");
         when(jwtService.generateRefreshToken(request.getEmail())).thenReturn("refresh-token");
 
-        // When
+
         LoginResponse response = authService.register(request);
 
-        // Then
+
         assertEquals("access-token", response.getAccessToken());
         assertEquals("refresh-token", response.getRefreshToken());
         assertEquals("Bearer", response.getTokenType());
@@ -95,7 +95,6 @@ class AuthServiceImplTest {
 
     @Test
     void register_shouldThrowDuplicateResourceException_whenEmailAlreadyExists() {
-        // Given
         RegisterRequest request = RegisterRequest.builder()
                 .nom("Safiy")
                 .email("existing@test.com")
@@ -105,7 +104,6 @@ class AuthServiceImplTest {
 
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.of(new User()));
 
-        // When / Then
         assertThrows(DuplicateResourceException.class, () -> authService.register(request));
 
         verify(userRepository, never()).save(any(User.class));
@@ -116,7 +114,6 @@ class AuthServiceImplTest {
 
     @Test
     void register_shouldThrowIllegalArgumentException_whenRoleIsInvalid() {
-        // Given
         RegisterRequest request = RegisterRequest.builder()
                 .nom("Safiy")
                 .email("safiy@test.com")
@@ -127,7 +124,6 @@ class AuthServiceImplTest {
         when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPassword");
 
-        // When / Then
         assertThrows(IllegalArgumentException.class, () -> authService.register(request));
 
         verify(userRepository, never()).save(any(User.class));

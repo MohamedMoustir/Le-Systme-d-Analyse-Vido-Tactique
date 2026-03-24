@@ -129,4 +129,11 @@ public class EquipeServiceImpl implements EquipeService {
 
         return equipeMapper.toDto(equipe);
     }
+
+//    public Map<String,Long> filterEquipe(){
+//      return equipeRepository.findAll().stream()
+//        .flatMap(p->p.getJoueurs().stream())
+//        .filter(p->p.getPoste().equals("Attaquants"))
+//        .collect(Collectors.groupingBy(Joueur::getPoste,Collectors.counting()));
+//    }
 }

@@ -90,8 +90,6 @@ public class JWTFilter  extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-
-
     private User createUserFromToken(String email, String role) {
         return User.builder()
                 .email(email)

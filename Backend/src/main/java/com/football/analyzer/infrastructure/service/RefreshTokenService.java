@@ -58,7 +58,6 @@ public class RefreshTokenService {
         }
     }
 
-
     public void revokeRefreshToken(String refreshToken) {
         try {
             String tokenId = jwtService.extractTokenId(refreshToken);

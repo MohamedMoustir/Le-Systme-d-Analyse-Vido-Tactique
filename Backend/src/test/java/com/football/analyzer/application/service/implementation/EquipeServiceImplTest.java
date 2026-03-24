@@ -117,7 +117,6 @@ class EquipeServiceImplTest {
     verify(equipeRepository).findByUserId(userId);
     verify(equipeMapper).toDto(equipe);
   }
-
   @Test
   void getMyTeam_shouldThrowBusinessLogicException_whenTeamNotFound() {
     String userId = "missing-user";

@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -272,9 +273,12 @@ public class VideoServiceImpl implements VideoService {
 
          //updatePlayerInfo(videoId, dto);
     }
-//     private Set<String> getTopCompletedVideo(){
+
+//    public Map<StatutAnalyse,List<VideoMetadata>> findAllVideo(){
 //      return metadataRepository.findAll().stream()
-//        .map(VideoMetadata::getTitre)
-//        .collect(Collectors.toSet());
-//     }
+//        .collect(Collectors.groupingBy(VideoMetadata::getStatut));
+//
+//    }
+
+
 }

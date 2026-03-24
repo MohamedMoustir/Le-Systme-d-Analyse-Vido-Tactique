@@ -10,4 +10,5 @@ import java.util.List;
 public interface SpringDataVideoRepository  extends MongoRepository<VideoMetadata,String> {
     List<VideoMetadata> findByUploaderId(String userId);
     long countByUploaderId(String uploaderId);
+
 }

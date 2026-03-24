@@ -11,11 +11,8 @@ import java.util.List;
 
 public interface VideoService {
     void processAnalysisMessage(String videoId, FrameAnalysisDTO dto);
-
     VideoResponse uploadAndSave(MultipartFile file, VideoUploadRequest request, String userId);
-
     List<VideoMetadata> findByUploaderId(String userId);
-
     VideoMetadata findById(String videoId);
 
 }

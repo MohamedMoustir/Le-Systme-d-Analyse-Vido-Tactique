@@ -54,6 +54,7 @@ teams:
 upload:
   path: /uploads/
 
+
 logging:
   level:
     root: INFO

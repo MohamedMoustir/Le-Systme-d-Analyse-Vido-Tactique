@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerFlagPipe } from '../../pipes/player-flag-pipe';
-import { IsCoach } from "../../directives/is-coach";
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-shared-joueur-card',
   standalone: true,
-  imports: [CommonModule, IsCoach],
+  imports: [CommonModule],
   templateUrl: './joueur-card.component.html'
 })
 export class JoueurCardComponent {
@@ -17,24 +17,16 @@ export class JoueurCardComponent {
   onDelete() { this.delete.emit(this.joueur.id); }
   onEdit() { this.edit.emit(this.joueur); }
 
-getCorrectImageUrl(url: string | null | undefined): string | null {
-  if (!url) return null;
+  getCorrectImageUrl(url: string | null | undefined): string | null {
+    if (!url) return null;
 
-  if (url.startsWith('http') && !url.includes('localhost')) {
-    return url;
+    if (url.startsWith('http') && !url.includes('localhost') && !url.includes('savt-vision.live')) {
+      return url;
+    }
+
+    const fileName = url.split('/').pop();
+    if (!fileName) return null;
+
+    return `${environment.apiUrl}/uploads/${fileName}`;
   }
-
-  let cleanPath = url.replace('http://localhost:8080', '');
-  
-  if (!cleanPath.startsWith('/uploads/')) {
-    cleanPath = '/uploads/' + (cleanPath.startsWith('/') ? cleanPath.substring(1) : cleanPath);
-  }
-
-  if (window.location.hostname === 'localhost') {
-    return `http://localhost:8080/api${cleanPath}`;
-  }
-
- 
-  return `/api${cleanPath}`;
-}
 }

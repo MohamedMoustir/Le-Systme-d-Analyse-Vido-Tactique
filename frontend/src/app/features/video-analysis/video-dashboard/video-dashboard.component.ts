@@ -211,18 +211,11 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
     const fileName = path.split('/').pop();
     if (!fileName) return null;
 
-    const cleanApiPath = `/api/uploads/${fileName}`;
-
-    if (window.location.hostname === 'localhost') {
-      return `http://localhost:8080${cleanApiPath}`;
-    }
-
-    return cleanApiPath;
+   
+    return `${environment.apiUrl}/uploads/${fileName}`;
   }
 
 
-  MatchService(){
-    
-  }
+  
 
 }

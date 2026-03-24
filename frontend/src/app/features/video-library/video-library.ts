@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { VideoStore } from '../../core/store/video.store';
 import { SidebarComponent } from "../../core/layout/sidebar/app-sidebar";
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-video-library',
@@ -12,16 +13,14 @@ import { SidebarComponent } from "../../core/layout/sidebar/app-sidebar";
 })
 export class VideoLibraryComponent implements OnInit {
   readonly store = inject(VideoStore);
-  
-  private cacheBuster = new Date().getTime(); 
+  private cacheBuster = new Date().getTime();
 
   ngOnInit() {
     this.store.loadUserVideos();
   }
 
   getVideoUrl(video: any): string {
-    let url = `http://localhost:8080/api/videos/play/${video.id}`;
-    
-    return url;
+    return `${environment.apiUrl}/videos/play/${video.id}`;
+  
   }
 }

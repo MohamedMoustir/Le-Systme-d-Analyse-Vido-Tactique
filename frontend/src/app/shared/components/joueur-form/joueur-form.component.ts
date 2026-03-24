@@ -19,4 +19,6 @@ export class JoueurFormComponent {
   onClose() { this.close.emit(); }
   onSubmit() { this.submitForm.emit(); }
   onPhotoClick() { this.uploadPhoto.emit(); }
+
+ 
 }

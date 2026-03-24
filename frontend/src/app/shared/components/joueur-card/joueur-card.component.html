@@ -5,7 +5,7 @@
      (error)="imgProfile.src = 'https://ui-avatars.com/api/?name=' + joueur.nomComplet + '&background=070b14&color=38bdf8'"
      class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
      alt="Photo">
-    <div class="absolute inset-0 bg-gradient-to-t from-[#070b14] via-[#070b14]/40 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#6a7590] via-[#070b14]/40 to-transparent"></div>
   </div>
 
   <div class="absolute top-4 left-6 z-10">
@@ -14,7 +14,7 @@
 
   <div class="absolute bottom-0 left-0 right-0 p-8 z-10">
     <div class="flex flex-col gap-1">
-      <span class="text-blue-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-1">{{ joueur.poste }}</span>
+      <span class="text-blue-400 text-[10px] font-bold uppercase tracking-[0.3em] mb-1">{{ joueur.poste  }}</span>
       <h3 class="text-2xl font-black text-white tracking-tight uppercase leading-none">{{ joueur.nomComplet }}</h3>
       <div class="h-1 w-12 bg-blue-500 mt-4 rounded-full transition-all duration-500 group-hover:w-full"></div>
     </div>

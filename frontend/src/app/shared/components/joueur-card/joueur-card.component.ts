@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PlayerFlagPipe } from '../../pipes/player-flag-pipe';
 
 @Component({
   selector: 'app-shared-joueur-card',

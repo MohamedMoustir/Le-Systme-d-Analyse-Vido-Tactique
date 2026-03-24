@@ -4,6 +4,7 @@ import { authGuard } from './core/guards/auth-guard';
 import { adminGuard } from './core/guards/admin-guard';
 import { userResolver } from './core/resolvers/user-resolver';
 import { MainLayout } from './core/layout/main-layout/app-main-layout';
+import { canExitGuard } from './core/guards/can-exit-guard';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,7 @@ export const routes: Routes = [
   },
   {
     path: 'team',
+    // canDeactivate:[canExitGuard],
     loadComponent: () => import('./features/team/team.component').then(m => m.TeamComponent)
   },
   {

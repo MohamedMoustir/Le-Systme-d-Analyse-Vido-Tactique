@@ -36,5 +36,5 @@ export class EquipeService {
         return this.http.post<Joueur>(`${this.apiUrl}/my-team/joueur`, dto);
     }
 
-  
+    
 }

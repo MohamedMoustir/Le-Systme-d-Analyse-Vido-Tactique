@@ -7,6 +7,7 @@ import { EquipeService } from '../../core/services/equipe.service';
 import { JoueurService } from '../../core/services/joueur.service';
 import { EquipeStore } from '../../core/store/equipe.store';
 import { SidebarComponent } from "../../core/layout/sidebar/app-sidebar";
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -17,7 +18,7 @@ export class TeamComponent implements OnInit {
   private fb = inject(FormBuilder);
   private joueurService = inject(JoueurService);
   private equipeService = inject(EquipeService);
-  readonly store = inject(EquipeStore);
+  public store = inject(EquipeStore);
 
   isModalOpen = signal(false);
   editingJoueurId = signal<number | null>(null);
@@ -33,6 +34,10 @@ export class TeamComponent implements OnInit {
     poste: ['', [Validators.required]],
     photoUrl: ['']
   });
+
+  chekCanExit() {
+    return this.joueurForm.dirty
+  }
 
   constructor() {
     effect(() => {

@@ -34,7 +34,5 @@ export class Register {
     this.store.register(userData);
 
   }
-  loginWithGoogle() {
-    console.log("Tentative de connexion avec Google...");
-  }
+ 
 }

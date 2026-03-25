@@ -23,9 +23,7 @@ export class Login {
 
   get f() { return this.loginForm.controls; }
 
-  loginWithGoogle() {
-    console.log("Login Google...");
-  }
+
 
   onSubmit() {
     if (this.loginForm.invalid) {

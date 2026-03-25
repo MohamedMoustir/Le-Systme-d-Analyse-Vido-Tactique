@@ -20,7 +20,7 @@ const initialState: AuthState = {
     user: null,
     token: localStorage.getItem('token'),
     role: localStorage.getItem('role'),
-    plan: 'FREE', 
+    plan: 'FREE',
     isLoading: false,
     error: null
 };
@@ -28,7 +28,7 @@ const initialState: AuthState = {
 export const AuthStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
-    
+
     withComputed(({ token, role, plan }) => ({
         isAuthenticated: computed(() => !!token()),
         isAdmin: computed(() => role() === 'ADMIN'),
@@ -37,7 +37,7 @@ export const AuthStore = signalStore(
     })),
 
     withMethods((store, authService = inject(AuthService), toastService = inject(ToastService), router = inject(Router)) => ({
-        
+
         login: rxMethod<any>(
             pipe(
                 tap(() => patchState(store, { isLoading: true, error: null })),
@@ -62,7 +62,7 @@ export const AuthStore = signalStore(
                                         error: null
                                     });
 
-                                       toastService.success('Connexion réussie', 'Succès');
+                                    toastService.success('Connexion réussie', 'Succès');
                                     setTimeout(() => {
                                         const target = res.role === 'ADMIN' ? '/admin/dashboard' : '/';
                                         router.navigate([target]);
@@ -73,11 +73,22 @@ export const AuthStore = signalStore(
                                 }
                             },
                             error: (err: any) => {
-                                console.error("Login Error:", err);
+                               
+
                                 let errorMessage = "Erreur serveur. Veuillez vérifier votre connexion.";
-                                if (err.status === 403 || err.status === 401 || err.status === 0) {
+
+                                const status = err.status;
+
+                                if (status === 500 || status === 403) {
                                     errorMessage = "Email ou mot de passe incorrect.";
+                                } else if (status === 0) {
+                                    errorMessage = "Impossible de contacter le serveur (CORS ou Réseau).";
+                                } else if (status === 404) {
+                                    errorMessage = "Service d'authentification introuvable.";
                                 }
+
+                                toastService.error(errorMessage, 'Erreur');
+
                                 patchState(store, { isLoading: false, error: errorMessage });
                             },
                         })
@@ -109,14 +120,14 @@ export const AuthStore = signalStore(
 
         fetchProfileFromDb: () => {
             const token = store.token();
-            if (!token) return; 
+            if (!token) return;
 
             authService.getProfile().subscribe({
                 next: (realUser) => {
                     patchState(store, {
                         user: realUser,
                         role: realUser.role,
-                        plan: realUser.plan 
+                        plan: realUser.plan
                     });
                 },
                 error: () => {
@@ -129,7 +140,7 @@ export const AuthStore = signalStore(
         },
 
         logout: () => {
-            localStorage.clear(); 
+            localStorage.clear();
             patchState(store, { user: null, token: null, role: null, plan: 'FREE' });
             router.navigate(['/login']);
             toastService.success('Déconnexion réussie', 'Succès');

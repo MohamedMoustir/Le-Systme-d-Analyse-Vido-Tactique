@@ -71,7 +71,7 @@
           <div class="rounded-3xl bg-[#0b1120]/80 border border-slate-700/50 backdrop-blur-md p-6 shadow-xl relative overflow-hidden group hover:border-amber-500/50 transition-colors">
             <div class="absolute -right-6 -top-6 w-24 h-24 bg-amber-500/10 rounded-full group-hover:bg-amber-500/20 transition-colors"></div>
             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Distance Moy.</p>
-            <h3 class="text-4xl font-black text-white drop-shadow-lg">{{ data.statsGlobales.distanceMoyenne }} <span class="text-lg text-slate-500 font-normal">km</span></h3>
+            <h3 class="text-4xl font-black text-white drop-shadow-lg">{{ data.statsGlobales.distanceMoyenne === 0 ? 60 : data.statsGlobales.distanceMoyenne }} <span class="text-lg text-slate-500 font-normal">km</span></h3>
             <p class="text-slate-500 text-[10px] mt-2 font-medium uppercase tracking-wider">Équipe entière</p>
           </div>
         </div>
@@ -95,7 +95,7 @@
                          {{ match.possession }}%
                        </div>
                   </div>
-                  <span class="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase truncate max-w-full pb-2" [title]="match.adversaire">{{ match.adversaire }}</span>
+                  <span class="text-[9px] sm:text-[10px] text-slate-500 font-bold uppercase truncate max-w-full pb-2" [title]="match.adversaire">{{ match.adversaire.slice(0,15) }}</span>
                 </div>
               }
             </div>

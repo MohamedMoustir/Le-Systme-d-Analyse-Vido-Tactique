@@ -1,7 +1,9 @@
 package com.football.analyzer.presentation.controller;
 
 import com.football.analyzer.application.service.EquipeService;
+import com.football.analyzer.domain.entity.Joueur;
 import com.football.analyzer.domain.entity.User;
+import com.football.analyzer.domain.repository.EquipeRepository;
 import com.football.analyzer.presentation.dto.Response.EquipeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/equipes")
@@ -17,8 +20,9 @@ import java.security.Principal;
 public class EquipeController {
 
     private final EquipeService equipeService;
+  private final EquipeRepository equipeRepository;
 
-    @GetMapping("/my-team")
+  @GetMapping("/my-team")
     public ResponseEntity<EquipeResponse> getMyTeam(Principal principal) {
         String userId = principal.getName();
 
@@ -59,4 +63,13 @@ public class EquipeController {
 
         return ResponseEntity.ok(equipeService.createEquipe(userId, nomEquipe, couleurHex));
     }
+
+
+//    public List<String> finJouer(String post){
+//      return equipeRepository.findAll().stream()
+//        .flatMap(p->p.getJoueurs().stream())
+//        .filter(p->p.getPoste().equals(post))
+//        .map(Joueur::getNomComplet).toList();
+//
+//    }
 }

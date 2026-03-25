@@ -274,11 +274,10 @@ public class VideoServiceImpl implements VideoService {
          //updatePlayerInfo(videoId, dto);
     }
 
-//    public Map<StatutAnalyse,List<VideoMetadata>> findAllVideo(){
-//      return metadataRepository.findAll().stream()
-//        .collect(Collectors.groupingBy(VideoMetadata::getStatut));
-//
-//    }
+    public Map<StatutAnalyse,List<String>> findAllVideo(String userId){
+      return metadataRepository.findAll().stream()
+        .collect(Collectors.groupingBy(VideoMetadata::getStatut,Collectors.mapping(VideoMetadata::getTitre,Collectors.toList())));
+    }
 
 
 }

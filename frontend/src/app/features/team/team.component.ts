@@ -118,9 +118,7 @@ export class TeamComponent implements OnInit {
     this.resetPagination();
   }
 
-  /**
-   * Get array of page numbers for pagination buttons (e.g., [1, 2, 3, 4, 5])
-   */
+  
   getPageNumbers(): number[] {
     const pageCount = this.totalPages();
     return Array.from({ length: pageCount }, (_, index) => index + 1);
@@ -234,4 +232,7 @@ export class TeamComponent implements OnInit {
   openTeamCreationModal() {
     console.log('Open Team Creation Form');
   }
+
+
+  
 }

@@ -4,7 +4,7 @@ import { ApiService } from '../services/api.service';
 import { WebsocketService } from '../services/websocket.service';
 import { tapResponse } from '@ngrx/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap, finalize } from 'rxjs';
+import { pipe, switchMap, tap, finalize, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { VideoResponse, FrameAnalysis } from '../models/analysis.model';
 import { ToastService } from '../services/toast.service';
@@ -78,9 +78,9 @@ export const VideoStore = signalStore(
   })),
 
   withMethods((store, toastService = inject(ToastService),
-               apiService = inject(ApiService), 
-               wsService = inject(WebsocketService),
-               zone = inject(NgZone)) => { 
+    apiService = inject(ApiService),
+    wsService = inject(WebsocketService),
+    zone = inject(NgZone)) => {
 
     const formatTime = (seconds: number): string => {
       const mins = Math.floor(seconds / 60);
@@ -103,22 +103,22 @@ export const VideoStore = signalStore(
                     team: data.team_id === 0 ? 'A' : (data.team_id === 1 ? 'B' : 'neutral')
                   };
 
-                  patchState(store, (state) => ({ 
-                    matchEvents: [...state.matchEvents, newEvent] 
+                  patchState(store, (state) => ({
+                    matchEvents: [...state.matchEvents, newEvent]
                   }));
-                } 
+                }
                 else if (data.type === 'video_info') {
                   patchState(store, { totalFrames: data.total_frames });
                 }
                 else {
                   const frameNum = data.frameNum || data.frame_num || 0;
-                  patchState(store, { 
-                    currentFrameData: { ...data }, 
-                    currentTime: frameNum / 25 
+                  patchState(store, {
+                    currentFrameData: { ...data },
+                    currentTime: frameNum / 25
                   });
                 }
               });
-            }), 
+            }),
             finalize(() => console.log("Stream ended or disconnected"))
           )
         )
@@ -147,7 +147,7 @@ export const VideoStore = signalStore(
                   const errorCode = err?.status ?? null;
                   patchState(store, { isUploading: false, status: 'error', uploadMessage: 'Erreur upload', uploadErrorCode: errorCode });
                   toastService.error('Erreur lors de l\'upload', 'Erreur');
-                } 
+                }
               })
             )
           )
@@ -181,7 +181,7 @@ export const VideoStore = signalStore(
                     streamRawUrl: rawUrl
                   });
 
-                  connectToRealtimeData(videoId); 
+                  connectToRealtimeData(videoId);
                 },
                 error: (err) => {
                   patchState(store, { status: 'error', isAnalyzing: false });
@@ -219,14 +219,24 @@ export const VideoStore = signalStore(
           )
         )
       ),
-
       loadUserVideos: rxMethod<void>(
         pipe(
           tap(() => patchState(store, { isLoadingList: true })),
           switchMap(() =>
             apiService.getMyVideos().pipe(
+              map((videos) =>
+                videos.map((video) => {
+                  if (video.urlFichier && video.urlFichier.includes('/api/uploads/')) {
+                    return {
+                      ...video,
+                      urlFichier: video.urlFichier.replace('/api/uploads/', '')
+                    };
+                  }
+                  return video;
+                })
+              ),
               tapResponse({
-                next: (videos) => patchState(store, { userVideos: videos, isLoadingList: false }),
+                next: (cleanedVideos) => patchState(store, { userVideos: cleanedVideos, isLoadingList: false }),
                 error: (err) => {
                   patchState(store, { isLoadingList: false });
                   toastService.error('Erreur lors du chargement des vidéos', 'Erreur');

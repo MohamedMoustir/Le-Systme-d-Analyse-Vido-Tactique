@@ -41,7 +41,7 @@ export class SubscriptionComponent implements OnInit {
 
   get storageBarWidth(): number {
     const s = this.storage();
-    return s ? Math.min(s.percentage, 100) : 0;
+    return s ? Math.min(s.percentage, 100) : 20;
   }
 
   get storageBarColor(): string {

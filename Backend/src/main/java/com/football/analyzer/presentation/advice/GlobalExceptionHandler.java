@@ -80,14 +80,11 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.PAYMENT_REQUIRED, "PAYMENT_REQUIRED", ex.getMessage(), request.getRequestURI());
     }
 
-
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
         logger.error("Unexpected error occurred: {}", ex.getMessage(), ex);
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", ex.getMessage(), request.getRequestURI());
     }
-
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<Map<String, Object>> handleForbiddenException(Exception ex, HttpServletRequest request) {

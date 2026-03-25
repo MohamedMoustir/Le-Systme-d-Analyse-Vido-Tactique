@@ -146,18 +146,6 @@ public class FootballAnalysisService {
         videoRepository.save(video);
     }
 
-//    public Map<Long,Long> getAllJouer() {
-//      return  positionRepository.findAll().stream()
-//        .filter(p -> p.getVideoId().equals("1aszefpkzng"))
-//        .collect(Collectors.groupingBy(PositionData::getJoueurId, Collectors.counting()))
-//        .entrySet().stream()
-//        .sorted(Map.Entry.<Long, Long>comparingByValue())
-//        .collect(Collectors.toMap(
-//          Map.Entry::getKey,
-//          Map.Entry::getValue,
-//          (e1, e2) -> e1,
-//          LinkedHashMap::new
-//        ));
-//    }
+
 
 }

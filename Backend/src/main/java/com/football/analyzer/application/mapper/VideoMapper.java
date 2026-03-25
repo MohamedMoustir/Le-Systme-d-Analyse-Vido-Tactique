@@ -12,7 +12,7 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, EventMapper.class, CommentMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, EventMapper.class})
 public interface VideoMapper {
     @Mapping(source = "titre", target = "titre")
     @Mapping(source = "statut", target = "statut")

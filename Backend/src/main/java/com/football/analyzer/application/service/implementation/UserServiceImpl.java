@@ -76,9 +76,5 @@ public class UserServiceImpl implements UserService {
     }
 
 
-//    public Set<String> getJouerAll(){
-//       return userRepository.findAll().stream()
-//         .filter(f->f.getRole().equals(Role.COACH))
-//         .flatMap(p->p.ge)
-//    }
+
 }

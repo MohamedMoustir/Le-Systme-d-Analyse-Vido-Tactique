@@ -210,7 +210,6 @@ export class VideoDashboardComponent implements OnInit, OnDestroy {
 
     const fileName = path.split('/').pop();
     if (!fileName) return null;
-
    
     return `${environment.apiUrl}/uploads/${fileName}`;
   }
